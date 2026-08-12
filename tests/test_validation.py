@@ -7,7 +7,7 @@ import pandas as pd
 
 from bci_calibration_benchmark.runner import run_benchmark
 from bci_calibration_benchmark.synthetic import build_smoke_config, generate_synthetic_dataset
-from bci_calibration_benchmark.validation import audit_result_integrity
+from bci_calibration_benchmark.validation import _read_csv, audit_result_integrity
 
 
 def _small_run(tmp_path: Path, name: str):
@@ -51,3 +51,22 @@ def test_audit_detects_source_assignment_tampering(tmp_path: Path) -> None:
 
     assert audit["status"] == "failed"
     assert "digests do not match" in audit["error_message"]
+
+
+def test_read_csv_round_trips_floats_exactly(tmp_path: Path) -> None:
+    # Regression test: pandas' default C float parser is not guaranteed to
+    # round-trip a decimal literal to its exact original float64 bit
+    # pattern. For a probability near 1.0 that is clipped and log-scaled by
+    # log_loss, a single 1-ULP parsing error is amplified (1/p derivative
+    # near the clip boundary) into a spurious audit mismatch. See the note
+    # on validation._read_csv.
+    text = "0.9999999999999707"
+    value = float(text)
+    path = tmp_path / "floats.csv"
+    path.write_text(f"y_score\n{text}\n", encoding="utf-8")
+
+    default_parsed = float(pd.read_csv(path)["y_score"].iloc[0])
+    exact_parsed = float(_read_csv(path)["y_score"].iloc[0])
+
+    assert default_parsed != value, "fixture no longer reproduces the pandas parsing gap"
+    assert exact_parsed == value
