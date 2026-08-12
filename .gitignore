@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+.venv/
+venv/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Data and caches
+data/*
+!data/.gitkeep
+!data/README.md
+mne_data/
+moabb_data/
+*.fif
+*.edf
+*.gdf
+*.mat
+*.bdf
+
+# Results and figures
+results/*
+!results/.gitkeep
+figures/*
+!figures/.gitkeep
+
+# Model checkpoints
+*.pt
+*.pth
+*.ckpt
+
+# Local environment capture
+requirements/environment-freeze.txt
+
+# Logs
+*.log

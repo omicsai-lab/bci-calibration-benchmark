@@ -1,0 +1,72 @@
+# Sensitivity analysis for the size of the population source cohort. This is
+# intentionally separate from the primary run because using every available
+# source participant changes both computation and the target-to-source weight.
+experiment:
+  name: bci-calibration-all-sources-sensitivity
+  seed: 20260811
+  output_root: results
+  processed_root: data/processed
+  cache_root: data/moabb-cache
+  continue_on_error: false
+
+preprocessing:
+  fmin: 8.0
+  fmax: 30.0
+  tmin: 0.5
+  tmax: 3.5
+  resample: 128.0
+  channels: null
+  dtype: float32
+
+datasets:
+  - name: Lee2019_MI
+    subjects: all
+    exclude_subjects: []
+  - name: BNCI2014_001
+    subjects: all
+    exclude_subjects: []
+  - name: Zhou2016
+    subjects: all
+    exclude_subjects: []
+
+split:
+  policy: latest_session_only
+  test_fraction: 0.30
+  repeats: 5
+  allow_trial_level_fallback: false
+  minimum_test_per_class: 10
+  minimum_calibration_per_class: 40
+
+calibration:
+  budgets_per_class: [0, 5, 10, 20, 40]
+  insufficient_budget: error
+  nested: true
+
+source:
+  max_subjects: null
+  max_trials_per_class_per_subject: 20
+  balance_classes_within_subject: true
+
+methods: [logvar_lda, csp_lda, riemann_lr]
+metrics:
+  primary: roc_auc
+  secondary: [balanced_accuracy, accuracy, macro_f1, brier, log_loss]
+classical:
+  csp_components: 8
+  csp_reg: ledoit_wolf
+  logistic_c: 1.0
+  tangent_mean_max_iter: 50
+  tangent_mean_tol: 1.0e-9
+analysis:
+  bootstrap_resamples: 2000
+  ci_level: 0.95
+  pairwise_budgets: [5, 10]
+  aucc_max_budget_per_class: 40
+  roc_auc_threshold: 0.75
+  balanced_accuracy_threshold: 0.70
+  fit_mixed_effects: true
+runtime:
+  n_jobs_data: 1
+  overwrite_processed: false
+  resume: true
+  save_predictions: true

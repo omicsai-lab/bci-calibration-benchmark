@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "Please cite this software and the original datasets and libraries used in your analysis."
+title: "BCI Calibration Benchmark"
+type: software
+version: 0.1.0
+date-released: 2026-08-11
+authors:
+  - family-names: Li
+    given-names: James
+license: BSD-3-Clause
+keywords:
+  - brain-computer interface
+  - EEG
+  - motor imagery
+  - calibration
+  - reproducibility

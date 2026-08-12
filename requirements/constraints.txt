@@ -1,0 +1,13 @@
+# Reference top-level versions for the first public-data run.
+# Generate a fully resolved lock file on the execution machine with:
+#   python -m pip freeze --all > requirements/environment-freeze.txt
+moabb==1.5.0
+braindecode==1.7.0
+numpy>=2.0,<3
+pandas>=2.2,<3
+scipy>=1.13,<2
+scikit-learn>=1.6,<2
+mne>=1.10,<2
+PyYAML>=6.0,<7
+matplotlib>=3.9,<4
+statsmodels>=0.14,<1
