@@ -97,6 +97,35 @@ def _import_moabb_objects(dataset_name: str) -> tuple[Any, Any, Any, dict[str, A
     return moabb, LeftRightImagery, dataset_class, dict(constructor_kwargs)
 
 
+def _instantiate_public_dataset(
+    dataset_name: str, dataset_class: Any, constructor_kwargs: dict[str, Any]
+) -> Any:
+    dataset = dataset_class(**constructor_kwargs)
+    if dataset_name == "Lee2019_MI":
+        # MOABB 1.5.0 workaround (not a protocol change): moabb.datasets.Lee2019
+        # names each subject's per-session data with the 0-indexed string
+        # `str(session - 1)` (i.e. "0", "1"), but its constructor forwards the
+        # *1-indexed* `sessions` argument ((1, 2) by default) to
+        # `BaseDataset.__init__(selected_sessions=...)`. `BaseDataset.get_data`
+        # then keeps only session keys in `{str(s) for s in _selected_sessions}`
+        # == {"1", "2"}, which matches only key "1" and silently drops the
+        # entire first session for every subject (verified by direct
+        # introspection: `Lee2019_MI()._get_single_subject_data(1)` returns
+        # sessions {"0", "1"}, but `Lee2019_MI().get_data([1])` returns only
+        # {"1"}). DATASET_EXPECTATIONS requires the full two-session protocol,
+        # so we neutralize this buggy post-hoc filter rather than narrow
+        # sessions. If a future MOABB release changes this representation, the
+        # guard below fails loudly instead of silently re-dropping data.
+        if dataset._selected_sessions != [1, 2]:
+            raise RuntimeError(
+                "Lee2019_MI._selected_sessions no longer matches the known MOABB "
+                "1.5.0 session-filtering bug this workaround targets; re-verify "
+                "moabb.datasets.Lee2019 session-key behavior before proceeding."
+            )
+        dataset._selected_sessions = None
+    return dataset
+
+
 def resolve_subjects(dataset: Any, section: DatasetSection) -> list[int]:
     available = [int(value) for value in dataset.subject_list]
     if section.subjects == "all":
@@ -251,7 +280,7 @@ def prepare_subject(
     if hasattr(moabb, "set_log_level"):
         moabb.set_log_level("warning")
 
-    dataset = dataset_class(**constructor_kwargs)
+    dataset = _instantiate_public_dataset(dataset_section.name, dataset_class, constructor_kwargs)
     paradigm = LeftRightImagery(
         fmin=config.preprocessing.fmin,
         fmax=config.preprocessing.fmax,
@@ -267,7 +296,6 @@ def prepare_subject(
         dataset=dataset,
         subjects=[int(subject)],
         return_epochs=True,
-        n_jobs=config.runtime.n_jobs_data,
     )
     if not hasattr(epochs, "get_data"):
         raise TypeError(f"Expected an MNE Epochs-like object, got {type(epochs)!r}")
@@ -348,7 +376,7 @@ def _discover_subjects(dataset_dir: Path) -> list[str]:
 
 def prepare_dataset(config: ExperimentConfig, section: DatasetSection) -> Path:
     _, _, dataset_class, constructor_kwargs = _import_moabb_objects(section.name)
-    dataset = dataset_class(**constructor_kwargs)
+    dataset = _instantiate_public_dataset(section.name, dataset_class, constructor_kwargs)
     requested_subjects = resolve_subjects(dataset, section)
     for subject in requested_subjects:
         prepare_subject(config, section, subject)

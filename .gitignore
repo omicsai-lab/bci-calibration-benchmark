@@ -45,3 +45,4 @@ requirements/environment-freeze.txt
 
 # Logs
 *.log
+.smoke-work/

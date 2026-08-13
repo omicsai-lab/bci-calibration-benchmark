@@ -49,7 +49,17 @@ def aggregate_run(config: ExperimentConfig) -> Path:
     metrics_path = output_dir / "metrics.csv"
     if not metrics_path.exists():
         raise FileNotFoundError(f"Benchmark metrics not found: {metrics_path}")
-    metrics = pd.read_csv(metrics_path, dtype={"target_subject": str, "split_id": str})
+    # float_precision="round_trip": pandas' default fast float parser is not
+    # guaranteed bit-exact, and audit_result_integrity below recomputes
+    # metrics from predictions.csv.gz (read the same way in validation.py)
+    # and compares them against these values; see the note in
+    # validation.py's _read_csv for how a 1-ULP parsing gap turns into a
+    # spurious audit failure via log_loss's probability clipping.
+    metrics = pd.read_csv(
+        metrics_path,
+        dtype={"target_subject": str, "split_id": str},
+        float_precision="round_trip",
+    )
 
     audit = audit_result_integrity(config, metrics=metrics)
     if audit["status"] != "ok":

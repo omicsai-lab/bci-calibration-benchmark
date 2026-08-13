@@ -29,6 +29,14 @@ SPLIT_KEY = ["dataset", "target_subject", "repeat", "split_id"]
 def _read_csv(path: Path, **kwargs: Any) -> pd.DataFrame:
     if not path.exists():
         raise FileNotFoundError(path)
+    # pandas' default C float parser is not guaranteed to round-trip floats
+    # to their exact original bit pattern (~1 ULP errors are possible). This
+    # module recomputes metrics from stored predictions and compares them
+    # bit-for-bit against the originally stored values, and log_loss's
+    # near-0/near-1 probability clipping amplifies a 1-ULP input error by a
+    # factor of up to ~1e7 through its 1/p derivative, which was observed to
+    # turn a ~1e-16 parsing wobble into a spurious ~1e-11 audit failure.
+    kwargs.setdefault("float_precision", "round_trip")
     return pd.read_csv(path, **kwargs)
 
 

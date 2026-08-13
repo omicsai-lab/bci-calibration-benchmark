@@ -25,7 +25,19 @@ datasets:
     subjects: [1, 2, 3]
     exclude_subjects: []
   - name: Zhou2016
-    subjects: [1, 2, 3]
+    # Subject 2 is omitted (not merely excluded, since config.validate()
+    # rejects a subject that is both explicitly included and excluded):
+    # their BIDS-released session-1/run-1 recording contains only 20
+    # trials/class instead of the documented 25/run (verified directly
+    # against raw event counts via mne.events_from_annotations on the
+    # released raw file; the run's recorded duration is correspondingly
+    # shorter, 702s vs ~850-910s for every other run/subject/session in
+    # this cohort). This is a genuine acquisition-time shortfall in the
+    # public release, not a MOABB or pipeline artifact, and it fails the
+    # pinned per-session trial-count floor
+    # (DATASET_EXPECTATIONS["Zhou2016"].minimum_trials_per_class_per_session
+    # = 50, i.e. 2 runs x 25/class) in datasets.py. See docs/debugging_log.md.
+    subjects: [1, 3]
     exclude_subjects: []
 
 split:
