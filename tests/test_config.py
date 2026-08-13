@@ -54,13 +54,17 @@ def test_fingerprint_changes_with_protocol() -> None:
     assert changed.preprocessing_fingerprint == config.preprocessing_fingerprint
 
 
-def test_zhou2016_subject_2_excluded_from_every_checked_in_config() -> None:
-    # Zhou2016 subject 2 is structurally ineligible for the prespecified
-    # confirmatory design (docs/DECISIONS.md): their released session-1/
-    # run-1 recording has only 20 trials/class instead of the protocol's
-    # 25/run. This must hold in the pilot, confirmatory, and every
-    # sensitivity configuration, whether expressed as an explicit subject
-    # list or as `subjects: all` plus `exclude_subjects`.
+def test_zhou2016_structurally_ineligible_subjects_excluded_from_every_checked_in_config() -> None:
+    # Zhou2016 subjects 2 and 4 are structurally ineligible for the
+    # prespecified confirmatory design (docs/DECISIONS.md): each has one
+    # released session/run with only 20 trials/class instead of the
+    # protocol's 25/run (subject 2: session 1, run 1; subject 4: session 0,
+    # run 0). Subject 4 was only discovered during the full-cohort run because
+    # the pilot exercised only Zhou2016 subjects 1 and 3. Subject 2 had
+    # already been excluded during pilot structural validation, and subject 4
+    # was not part of the pilot cohort. Every other checked-in config uses
+    # `subjects: all` and must exclude both.
+    ineligible_subjects = {2, 4}
     for path in (
         "configs/pilot.yaml",
         "configs/full.yaml",
@@ -70,6 +74,8 @@ def test_zhou2016_subject_2_excluded_from_every_checked_in_config() -> None:
         config = load_config(path)
         zhou = next(section for section in config.datasets if section.name == "Zhou2016")
         if zhou.subjects == "all":
-            assert 2 in zhou.exclude_subjects, f"{path}: Zhou2016 subject 2 not excluded"
+            missing = ineligible_subjects.difference(zhou.exclude_subjects)
+            assert not missing, f"{path}: Zhou2016 subjects {missing} not excluded"
         else:
-            assert 2 not in zhou.subjects, f"{path}: Zhou2016 subject 2 explicitly included"
+            requested = ineligible_subjects.intersection(zhou.subjects)
+            assert not requested, f"{path}: Zhou2016 subjects {requested} explicitly included"

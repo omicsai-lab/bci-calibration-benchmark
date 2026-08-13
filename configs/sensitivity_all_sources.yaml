@@ -27,12 +27,14 @@ datasets:
     exclude_subjects: []
   - name: Zhou2016
     subjects: all
-    # Subject 2 is structurally ineligible: their publicly released
-    # session-1/run-1 recording contains only 20 trials/class instead of the
-    # protocol's 25/run, discovered by pre-outcome structural validation
-    # (not performance). See docs/DECISIONS.md ("Zhou2016 subject 2
-    # structural exclusion") and docs/debugging_log.md, section 4.
-    exclude_subjects: [2]
+    # Subjects 2 and 4 are structurally ineligible: each has one publicly
+    # released session/run with only 20 trials/class instead of the
+    # protocol's 25/run (subject 2: session 1, run 1; subject 4: session 0,
+    # run 0), discovered by pre-outcome structural validation (not
+    # performance) and verified directly against raw BIDS event counts. See
+    # docs/DECISIONS.md ("Zhou2016 subject 2 structural exclusion" and
+    # "Zhou2016 subject 4 structural exclusion") and docs/debugging_log.md.
+    exclude_subjects: [2, 4]
 
 split:
   policy: latest_session_only
