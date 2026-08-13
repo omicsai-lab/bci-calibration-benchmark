@@ -52,3 +52,24 @@ def test_fingerprint_changes_with_protocol() -> None:
     changed = replace(config, calibration=replace(config.calibration, budgets_per_class=(0, 5, 10)))
     assert changed.experiment_fingerprint != config.experiment_fingerprint
     assert changed.preprocessing_fingerprint == config.preprocessing_fingerprint
+
+
+def test_zhou2016_subject_2_excluded_from_every_checked_in_config() -> None:
+    # Zhou2016 subject 2 is structurally ineligible for the prespecified
+    # confirmatory design (docs/DECISIONS.md): their released session-1/
+    # run-1 recording has only 20 trials/class instead of the protocol's
+    # 25/run. This must hold in the pilot, confirmatory, and every
+    # sensitivity configuration, whether expressed as an explicit subject
+    # list or as `subjects: all` plus `exclude_subjects`.
+    for path in (
+        "configs/pilot.yaml",
+        "configs/full.yaml",
+        "configs/sensitivity_three_channels.yaml",
+        "configs/sensitivity_all_sources.yaml",
+    ):
+        config = load_config(path)
+        zhou = next(section for section in config.datasets if section.name == "Zhou2016")
+        if zhou.subjects == "all":
+            assert 2 in zhou.exclude_subjects, f"{path}: Zhou2016 subject 2 not excluded"
+        else:
+            assert 2 not in zhou.subjects, f"{path}: Zhou2016 subject 2 explicitly included"

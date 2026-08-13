@@ -86,3 +86,92 @@ Every scientific decision is dated and recorded before public-data outcome analy
 
 **Decision:** Do not add Yang2025 to confirmatory v0.1.  
 **Rationale:** It is highly relevant but distributed as a large single archive and has not passed local adapter/compute validation. It can serve as pre-declared external validation in a later version.
+
+## 2026-08-12 — Lee2019 session-index workaround
+
+**Observed behavior:** During the real-data pilot, `Lee2019_MI` preparation
+failed with `expected 2 sessions, observed 1`, even though
+`Lee2019_MI().n_sessions == 2` and both sessions' raw `.mat` files were
+present and downloaded.
+
+**Underlying MOABB 1.5.0 issue:** Introspection (`moabb/datasets/Lee2019.py`,
+`moabb/datasets/base.py`) showed that `Lee2019` names each subject's
+per-session data with 0-indexed string keys (`"0"`, `"1"`) internally, while
+its constructor forwards the *1-indexed* `sessions` argument (`(1, 2)` by
+default) to `BaseDataset.__init__(selected_sessions=sessions)`.
+`BaseDataset.get_data()` then keeps only session keys matching
+`{str(s) for s in selected_sessions}` == `{"1", "2"}`, which overlaps only
+key `"1"` and silently discards the entire first session for every subject.
+This was verified directly by introspection, not inferred, and reproduces
+unconditionally (it does not depend on our constructor kwargs and cannot be
+worked around by passing a different `sessions=` value, since `Lee2019`
+rejects any session value outside `[1, 2]`).
+
+**Decision:** Neutralize the bug at the point of dataset construction
+(`datasets.py::_instantiate_public_dataset`) by resetting
+`Lee2019_MI()._selected_sessions` to `None` after construction, which
+disables the buggy post-hoc filter and restores both sessions. This is a
+targeted, MOABB-version-specific workaround, not a change to our own
+session-handling logic.
+
+**Why the workaround is required, not optional:** Without it, the
+prespecified `latest_session_only` split (earlier sessions as calibration
+pool, latest session held out) is structurally impossible for `Lee2019_MI` —
+only one session would ever be observed. The dataset would otherwise have to
+be dropped from the confirmatory set entirely, which is a materially larger
+protocol change than working around a verified upstream indexing bug.
+
+**Estimand:** Unchanged. `DATASET_EXPECTATIONS["Lee2019_MI"].sessions == 2`
+already required the full two-session protocol before this bug was found;
+the workaround *restores* that pre-specified structure rather than altering
+it. No preprocessing, split policy, calibration budget, source-cohort logic,
+or statistical analysis changed.
+
+**Fail-loud guard:** The workaround asserts
+`dataset._selected_sessions == [1, 2]` (the exact known-buggy state)
+immediately before overriding it. If a future MOABB release changes this
+internal representation, the assertion raises `RuntimeError` instead of
+silently applying a now-incorrect override. Regression tests
+(`tests/test_datasets.py`) cover both the neutralization and the fail-loud
+path, and confirm no other confirmatory dataset (`BNCI2014_001`, `Zhou2016`)
+is affected.
+
+## 2026-08-12 — Zhou2016 subject 2 structural exclusion
+
+**Decision:** `Zhou2016` subject 2 is structurally ineligible for the
+prespecified confirmatory calibration design and is excluded from
+`configs/pilot.yaml`, `configs/full.yaml`,
+`configs/sensitivity_three_channels.yaml`, and
+`configs/sensitivity_all_sources.yaml`.
+
+**Basis:** The publicly released recording for this subject's session
+1, run 1 contains only 20 trials/class where the protocol (and every other
+subject/session/run in this cohort) has 25 trials/class per run — verified
+directly against raw event counts in the released BIDS data via
+`mne.events_from_annotations`, independent of MOABB version or our
+pipeline. This fails
+`DATASET_EXPECTATIONS["Zhou2016"].minimum_trials_per_class_per_session`,
+which is unchanged and was not relaxed to accommodate this subject.
+
+**This is a pre-outcome structural exclusion, not performance-based subject
+removal:**
+
+- The failure occurred inside `validate_subject_structure` during
+  `prepare_data`/structural validation, strictly before any split
+  construction, model fit, prediction, or metric computation for this
+  subject was possible.
+- No model performance, calibration curve, or decoder output was consulted
+  in making this decision.
+- The exclusion is recorded in configuration (`exclude_subjects: [2]`),
+  visible to any reader inspecting the scientific configuration, rather
+  than hard-coded inside execution logic.
+
+**Estimand:** Unchanged. Left-hand-versus-right-hand motor-imagery ROC-AUC
+under later-session holdout remains the estimand; this decision only
+determines which participants can be structurally scored under that
+estimand. The remaining `Zhou2016` participants (all others satisfy the
+25-trials/class/run floor at the time of this pilot) are unaffected.
+
+**Scope:** This decision must stand before confirmatory outcome analysis
+begins and must not be revisited based on how any decoder performs on the
+remaining participants.

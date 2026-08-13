@@ -10,7 +10,7 @@ The scientific question is operational rather than architectural:
 
 > How much labeled EEG from a new user is required to improve performance on a later recording session, and how does that relationship vary across decoding methods, datasets, and users?
 
-Version `0.1.0` freezes the classical-core protocol before any public-data outcome is examined. The repository contains **no claimed public EEG result**. Synthetic outputs are software validation only.
+Version `0.1.0` froze the classical-core protocol before any public-data outcome was examined. Version `0.1.1` validates that the full software/data pipeline runs end to end on real public EEG data (adapter execution, structural validation, benchmark, audit, aggregation, and figure generation). **Neither release contains a claimed public EEG result.** The `0.1.1` real-data pilot is a non-inferential software/data-path validation, not the confirmatory analysis; see [Public-data pilot](#public-data-pilot) below.
 
 ## Confirmatory design
 
@@ -22,7 +22,7 @@ The task is binary **left-hand versus right-hand motor imagery**. The confirmato
 | `BNCI2014_001` | 9 | 2 | 22 | 250 Hz | 72 per class | canonical BCI Competition IV-2a replication |
 | `Zhou2016` | 4 | 3 | 14 | 250 Hz | 50 per class | independent three-session protocol replication |
 
-The nominal total is 67 participants. The final analytic count is determined only by pre-specified structural and class-count checks; it is not altered after decoder performance is observed.
+The nominal total is 67 participants (sum of the "Nominal participants" column above) — the number of subject IDs each dataset publishes, before any structural check runs. This is **not** an eligible or analyzed sample size. The confirmatory full-cohort run applies pre-specified structural and class-count checks (session count, run count, per-class trial minimums, channel montage) to every participant before any decoder is fit; a participant who fails those checks is excluded and recorded, never dropped after outcome inspection. One such exclusion is already known and documented: `Zhou2016` subject 2 fails the per-session trial-count check on the publicly released recording itself (see [`docs/DECISIONS.md`](docs/DECISIONS.md)) and is excluded in `configs/full.yaml` and every sensitivity configuration. The confirmatory full-cohort analysis has not yet been run, so the true structurally eligible count across all three datasets is not yet known; see [Confirmatory readiness](docs/pilot_acceptance.md) for the current pilot-derived expectation.
 
 For `Lee2019_MI`, the adapter is explicitly instantiated with `train_run=True`, `test_run=False`, and `resting_state=False`. This retains the labeled offline phase in both sessions and excludes the unlabeled online-feedback phase.
 
@@ -132,7 +132,7 @@ The synthetic smoke test checks deterministic end-to-end execution, split assign
 
 ## Public-data pilot
 
-The pilot is an adapter and compute validation run, not an inferential subset analysis.
+The pilot is an adapter and compute validation run, not an inferential subset analysis. **Pilot performance numbers must never be reported as scientific study findings**, cited in the manuscript Results, or used to select models, tune hyperparameters, or change participant eligibility.
 
 ```bash
 python scripts/prepare_data.py --config configs/pilot.yaml
@@ -143,7 +143,14 @@ python scripts/aggregate_results.py --config configs/pilot.yaml
 python scripts/make_figures.py --config configs/pilot.yaml
 ```
 
-The full run is permitted only after the pilot acceptance gates in [`docs/PILOT_EXECUTION.md`](docs/PILOT_EXECUTION.md) are satisfied.
+As of `v0.1.1`, this workflow has been executed end to end against real public EEG data for all three confirmatory adapters (`Lee2019_MI`, `BNCI2014_001`, `Zhou2016`) on macOS with Python 3.11 and `moabb==1.5.0`: environment validation, the full test suite (40 tests), the synthetic smoke test, real-data preparation, real-data structural validation, benchmark execution, result audit, aggregation, and figure generation all completed successfully. This demonstrates that the software and data path work end to end on real recordings; it does **not** constitute confirmatory scientific evidence, and no pilot performance figure appears in this repository's user-facing documentation. See [`docs/pilot_acceptance.md`](docs/pilot_acceptance.md) for the full closure record and [`docs/SOFTWARE_VALIDATION_REPORT.md`](docs/SOFTWARE_VALIDATION_REPORT.md) for validation evidence.
+
+Two genuine issues were found and resolved during the real-data pilot, both documented in [`docs/DECISIONS.md`](docs/DECISIONS.md) and traced in [`docs/debugging_log.md`](docs/debugging_log.md):
+
+- A MOABB 1.5.0 session-indexing bug that silently dropped `Lee2019_MI`'s first session for every subject. A guarded, fail-loud workaround restores the intended two-session protocol; it does not change the estimand.
+- `Zhou2016` subject 2's publicly released recording is structurally short one required trial block (see [Confirmatory design](#confirmatory-design) above). This was found by pre-outcome structural validation, not by inspecting performance, and the participant is excluded from the pilot, the confirmatory run, and every sensitivity configuration.
+
+The full confirmatory run is permitted only after the pilot acceptance gates in [`docs/PILOT_EXECUTION.md`](docs/PILOT_EXECUTION.md) and the GO decision in [`docs/pilot_acceptance.md`](docs/pilot_acceptance.md) are satisfied.
 
 ## Confirmatory and sensitivity runs
 
@@ -209,7 +216,9 @@ The code rejects or records failures when:
 
 ## Current validation status
 
-The release has passed the local unit/integration suite and a deterministic synthetic end-to-end run. MOABB and the public EEG archives were **not available in the build environment**, so real-data adapter execution remains an explicit pilot gate rather than a claimed validation. See [`docs/VALIDATION.md`](docs/VALIDATION.md) and [`docs/SOFTWARE_VALIDATION_REPORT.md`](docs/SOFTWARE_VALIDATION_REPORT.md).
+`v0.1.0` passed the local unit/integration suite and a deterministic synthetic end-to-end run; MOABB and the public EEG archives were not available in that build environment, so real-data adapter execution remained an explicit pilot gate rather than a claimed validation.
+
+`v0.1.1` closes that gate: the full software/data pipeline (environment validation, 40 unit/integration tests, the synthetic smoke test, real-data preparation, real-data structural validation, benchmark execution, result audit, aggregation, and figure generation) has now run successfully end to end on real public EEG data for `Lee2019_MI`, `BNCI2014_001`, and `Zhou2016`. This validates the software and data path. **It does not constitute confirmatory scientific evidence** — the pilot is a bounded adapter/compute check (see [Public-data pilot](#public-data-pilot) above), and the confirmatory full-cohort analysis has not yet been run. See [`docs/VALIDATION.md`](docs/VALIDATION.md), [`docs/SOFTWARE_VALIDATION_REPORT.md`](docs/SOFTWARE_VALIDATION_REPORT.md), and [`docs/pilot_acceptance.md`](docs/pilot_acceptance.md).
 
 ## Ethics and data governance
 
