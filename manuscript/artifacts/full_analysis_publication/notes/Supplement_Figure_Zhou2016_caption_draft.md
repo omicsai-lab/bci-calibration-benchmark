@@ -1,0 +1,1 @@
+**Supplement Figure. Zhou2016 calibration curves (descriptive only).** Same format as Figure 2, shown for Zhou2016 (n=2 after structural exclusion of subjects 2 and 4). With only two structurally eligible participants, this dataset cannot support an independent inferential claim; it is included for completeness and transparency only.

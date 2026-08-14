@@ -1,0 +1,16 @@
+% Requires \usepackage{booktabs}, \usepackage{tabularx}
+\begin{table}[t]
+\centering
+\small
+\caption{Confirmatory datasets and cohort eligibility. All three datasets share the same task: Left/right motor imagery (binary left-hand vs.\ right-hand classification). Nominal counts are the number of subject IDs each dataset publishes; final counts are participants that passed every pre-specified structural check (session count, run count, per-class trial minimums, channel montage) before any model was fit. See docs/DECISIONS.md for exclusion evidence.}
+\label{tab:datasets_cohort}
+\begin{tabularx}{\textwidth}{@{} l r p{2.3cm} r r r X @{}}
+\toprule
+Dataset & Nominal $N$ & Excluded & Final $N$ & Sessions & Channels & Confirmatory role \\
+\midrule
+Lee2019\_MI & 54 & None & 54 & 2 & 62 & Contributes to pooled confirmatory analysis; dataset-specific supportive \\
+BNCI2014\_001 & 9 & None & 9 & 2 & 22 & Contributes to pooled confirmatory analysis; dataset-specific supportive \\
+Zhou2016 & 4 & Subjects 2, 4 (structural) & 2 & 3 & 14 & Contributes to pooled confirmatory analysis (n=2); dataset-specific descriptive only \\
+\bottomrule
+\end{tabularx}
+\end{table}

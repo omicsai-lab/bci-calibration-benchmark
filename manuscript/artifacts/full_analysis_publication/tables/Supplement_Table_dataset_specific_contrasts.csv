@@ -1,0 +1,25 @@
+family,scope_dataset,contrast,budget_or_regime,method_display,n_pairs,mean_difference,ci_lower,ci_upper,p_value,p_holm,rank_biserial
+H2_regime_low_budget_dataset_supportive,BNCI2014_001,source_plus_target - subject,10 trials/class,csp_lda,9,-0.0114068930041152,-0.086051901148834,0.0531758509087791,0.91015625,1.0,0.0666666666666666
+H2_regime_low_budget_dataset_supportive,BNCI2014_001,source_plus_target - subject,10 trials/class,logvar_lda,9,-0.001466049382716,-0.0910112847222221,0.0634004736796982,0.30078125,1.0,0.4222222222222222
+H2_regime_low_budget_dataset_supportive,BNCI2014_001,source_plus_target - subject,10 trials/class,riemann_lr,9,-0.0683706275720164,-0.1318249528463649,-0.008804012345679,0.07421875,1.0,-0.6888888888888889
+H2_regime_low_budget_dataset_supportive,BNCI2014_001,source_plus_target - subject,5 trials/class,csp_lda,9,0.035329861111111,-0.0512176622513717,0.1151645018861454,0.203125,1.0,0.5111111111111111
+H2_regime_low_budget_dataset_supportive,BNCI2014_001,source_plus_target - subject,5 trials/class,logvar_lda,9,0.0207722479423868,-0.0823885727451988,0.0921133937757201,0.12890625,1.0,0.6
+H2_regime_low_budget_dataset_supportive,BNCI2014_001,source_plus_target - subject,5 trials/class,riemann_lr,9,-0.0530071159122085,-0.1317980002572016,0.0212155992798353,0.359375,1.0,-0.3777777777777777
+H2_regime_low_budget_dataset_supportive,Lee2019_MI,source_plus_target - subject,10 trials/class,csp_lda,54,0.0238385185185185,-0.0123706666666666,0.0556545277777777,0.0939955808017024,1.0,0.2619528619528619
+H2_regime_low_budget_dataset_supportive,Lee2019_MI,source_plus_target - subject,10 trials/class,logvar_lda,54,0.0352055555555555,0.0073055833333333,0.063592574074074,0.0123749378104613,0.1856240671569203,0.3912457912457912
+H2_regime_low_budget_dataset_supportive,Lee2019_MI,source_plus_target - subject,10 trials/class,riemann_lr,54,0.0197385185185185,-0.0051826111111111,0.0454206851851851,0.1397688414247252,1.0,0.2309764309764309
+H2_regime_low_budget_dataset_supportive,Lee2019_MI,source_plus_target - subject,5 trials/class,csp_lda,54,0.0566937037037037,0.0243718425925925,0.0865037222222222,0.0003827292784769,0.0065063977341076,0.5555555555555556
+H2_regime_low_budget_dataset_supportive,Lee2019_MI,source_plus_target - subject,5 trials/class,logvar_lda,54,0.0636881481481481,0.0351798796296296,0.0912043703703703,0.0001489575091953,0.0026812351655163,0.5932659932659933
+H2_regime_low_budget_dataset_supportive,Lee2019_MI,source_plus_target - subject,5 trials/class,riemann_lr,54,0.0485081481481481,0.0229966851851851,0.0736758148148148,0.0006402427027768,0.0102438832444299,0.534006734006734
+H2_regime_low_budget_dataset_supportive,Zhou2016,source_plus_target - subject,10 trials/class,csp_lda,2,0.08764,0.05312,0.12216,0.5,1.0,1.0
+H2_regime_low_budget_dataset_supportive,Zhou2016,source_plus_target - subject,10 trials/class,logvar_lda,2,0.0775,0.0140799999999999,0.14092,0.5,1.0,1.0
+H2_regime_low_budget_dataset_supportive,Zhou2016,source_plus_target - subject,10 trials/class,riemann_lr,2,0.0401999999999999,0.0221599999999998,0.0582399999999999,0.5,1.0,1.0
+H2_regime_low_budget_dataset_supportive,Zhou2016,source_plus_target - subject,5 trials/class,csp_lda,2,0.1630599999999999,0.1345199999999999,0.1916,0.5,1.0,1.0
+H2_regime_low_budget_dataset_supportive,Zhou2016,source_plus_target - subject,5 trials/class,logvar_lda,2,0.0964999999999999,0.0031999999999999,0.1897999999999999,0.5,1.0,1.0
+H2_regime_low_budget_dataset_supportive,Zhou2016,source_plus_target - subject,5 trials/class,riemann_lr,2,0.06908,0.0452799999999999,0.09288,0.5,1.0,1.0
+H3_method_aucc_dataset_supportive,BNCI2014_001,riemann_lr - csp_lda,source_plus_target regime (AUCC),riemann_lr vs csp_lda,9,-0.0636339111380222,-0.1114326962427978,-0.0243683418035073,0.01171875,0.052104642085722,-0.9111111111111112
+H3_method_aucc_dataset_supportive,BNCI2014_001,riemann_lr - csp_lda,subject regime (AUCC),riemann_lr vs csp_lda,9,-0.0063548481210966,-0.0451755874159245,0.0192994278237347,0.49609375,1.0,0.2888888888888888
+H3_method_aucc_dataset_supportive,Lee2019_MI,riemann_lr - csp_lda,source_plus_target regime (AUCC),riemann_lr vs csp_lda,54,0.036713249424229,0.0135123000796651,0.0608236715532188,0.0104209284171444,0.052104642085722,0.4006734006734007
+H3_method_aucc_dataset_supportive,Lee2019_MI,riemann_lr - csp_lda,subject regime (AUCC),riemann_lr vs csp_lda,54,0.0429496679839729,0.0287360591899882,0.0566789980644316,7.894402089452955e-07,4.7366412536717735e-06,0.7723905723905724
+H3_method_aucc_dataset_supportive,Zhou2016,riemann_lr - csp_lda,source_plus_target regime (AUCC),riemann_lr vs csp_lda,2,-0.039814135610969,-0.0528563590574056,-0.0267719121645324,0.5,1.0,-1.0
+H3_method_aucc_dataset_supportive,Zhou2016,riemann_lr - csp_lda,subject regime (AUCC),riemann_lr vs csp_lda,2,0.0355705918847624,-0.00578849049642,0.0769296742659448,1.0,1.0,0.3333333333333333

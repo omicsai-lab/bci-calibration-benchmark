@@ -1,0 +1,43 @@
+% Requires \usepackage{booktabs}, \usepackage{tabularx}, \usepackage{threeparttable}
+\begin{table}[t]
+\centering
+\tiny
+\begin{threeparttable}
+\caption{All dataset-specific (supportive, within-dataset) pairwise contrasts underlying the pooled confirmatory contrasts in Table~2, including Zhou2016 ($n=2$, descriptive/supportive only). $p_\mathrm{holm}$ is Holm-adjusted within each contrast family across all rows shown for that family (confirmatory + supportive combined), matching pairwise\_tests.csv.}
+\label{tab:dataset_specific_contrasts}
+\begin{tabularx}{\textwidth}{@{} l l X r r r r r @{}}
+\toprule
+Family & Dataset & Condition & $n$ & Mean $\Delta$ [95\% CI] & $p$ & $p_\mathrm{holm}$ & $r_\mathrm{rb}$ \\
+\midrule
+H2 (source+target vs. subject) & BNCI2014\_001 & csp\_lda, 10 trials/class & 9 & -0.011 [-0.086, 0.053] & 0.910 & 1.000 & 0.067 \\
+H2 (source+target vs. subject) & BNCI2014\_001 & logvar\_lda, 10 trials/class & 9 & -0.001 [-0.091, 0.063] & 0.301 & 1.000 & 0.422 \\
+H2 (source+target vs. subject) & BNCI2014\_001 & riemann\_lr, 10 trials/class & 9 & -0.068 [-0.132, -0.009] & 0.074 & 1.000 & -0.689 \\
+H2 (source+target vs. subject) & BNCI2014\_001 & csp\_lda, 5 trials/class & 9 & 0.035 [-0.051, 0.115] & 0.203 & 1.000 & 0.511 \\
+H2 (source+target vs. subject) & BNCI2014\_001 & logvar\_lda, 5 trials/class & 9 & 0.021 [-0.082, 0.092] & 0.129 & 1.000 & 0.600 \\
+H2 (source+target vs. subject) & BNCI2014\_001 & riemann\_lr, 5 trials/class & 9 & -0.053 [-0.132, 0.021] & 0.359 & 1.000 & -0.378 \\
+H2 (source+target vs. subject) & Lee2019\_MI & csp\_lda, 10 trials/class & 54 & 0.024 [-0.012, 0.056] & 0.094 & 1.000 & 0.262 \\
+H2 (source+target vs. subject) & Lee2019\_MI & logvar\_lda, 10 trials/class & 54 & 0.035 [0.007, 0.064] & 0.012 & 0.186 & 0.391 \\
+H2 (source+target vs. subject) & Lee2019\_MI & riemann\_lr, 10 trials/class & 54 & 0.020 [-0.005, 0.045] & 0.140 & 1.000 & 0.231 \\
+H2 (source+target vs. subject) & Lee2019\_MI & csp\_lda, 5 trials/class & 54 & 0.057 [0.024, 0.087] & $<$0.001 & 0.007* & 0.556 \\
+H2 (source+target vs. subject) & Lee2019\_MI & logvar\_lda, 5 trials/class & 54 & 0.064 [0.035, 0.091] & $<$0.001 & 0.003* & 0.593 \\
+H2 (source+target vs. subject) & Lee2019\_MI & riemann\_lr, 5 trials/class & 54 & 0.049 [0.023, 0.074] & $<$0.001 & 0.010* & 0.534 \\
+H2 (source+target vs. subject) & Zhou2016 & csp\_lda, 10 trials/class & 2 & 0.088 [0.053, 0.122] & 0.500 & 1.000 & 1.000 \\
+H2 (source+target vs. subject) & Zhou2016 & logvar\_lda, 10 trials/class & 2 & 0.077 [0.014, 0.141] & 0.500 & 1.000 & 1.000 \\
+H2 (source+target vs. subject) & Zhou2016 & riemann\_lr, 10 trials/class & 2 & 0.040 [0.022, 0.058] & 0.500 & 1.000 & 1.000 \\
+H2 (source+target vs. subject) & Zhou2016 & csp\_lda, 5 trials/class & 2 & 0.163 [0.135, 0.192] & 0.500 & 1.000 & 1.000 \\
+H2 (source+target vs. subject) & Zhou2016 & logvar\_lda, 5 trials/class & 2 & 0.096 [0.003, 0.190] & 0.500 & 1.000 & 1.000 \\
+H2 (source+target vs. subject) & Zhou2016 & riemann\_lr, 5 trials/class & 2 & 0.069 [0.045, 0.093] & 0.500 & 1.000 & 1.000 \\
+H3 (riemann\_lr vs. csp\_lda) & BNCI2014\_001 & riemann\_lr vs csp\_lda, source\_plus\_target regime (AUCC) & 9 & -0.064 [-0.111, -0.024] & 0.012 & 0.052 & -0.911 \\
+H3 (riemann\_lr vs. csp\_lda) & BNCI2014\_001 & riemann\_lr vs csp\_lda, subject regime (AUCC) & 9 & -0.006 [-0.045, 0.019] & 0.496 & 1.000 & 0.289 \\
+H3 (riemann\_lr vs. csp\_lda) & Lee2019\_MI & riemann\_lr vs csp\_lda, source\_plus\_target regime (AUCC) & 54 & 0.037 [0.014, 0.061] & 0.010 & 0.052 & 0.401 \\
+H3 (riemann\_lr vs. csp\_lda) & Lee2019\_MI & riemann\_lr vs csp\_lda, subject regime (AUCC) & 54 & 0.043 [0.029, 0.057] & $<$0.001 & $<$0.001* & 0.772 \\
+H3 (riemann\_lr vs. csp\_lda) & Zhou2016 & riemann\_lr vs csp\_lda, source\_plus\_target regime (AUCC) & 2 & -0.040 [-0.053, -0.027] & 0.500 & 1.000 & -1.000 \\
+H3 (riemann\_lr vs. csp\_lda) & Zhou2016 & riemann\_lr vs csp\_lda, subject regime (AUCC) & 2 & 0.036 [-0.006, 0.077] & 1.000 & 1.000 & 0.333 \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}
+\footnotesize
+\item[*] Holm-adjusted $p < 0.05$. Zhou2016 rows use $n=2$ participants and are descriptive only.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

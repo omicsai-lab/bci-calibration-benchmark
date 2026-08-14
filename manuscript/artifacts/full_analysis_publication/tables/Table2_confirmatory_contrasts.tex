@@ -1,0 +1,33 @@
+% Requires \usepackage{booktabs}, \usepackage{tabularx}, \usepackage{threeparttable}
+\begin{table}[t]
+\centering
+\small
+\begin{threeparttable}
+\caption{Main confirmatory pairwise contrasts, pooled participant-weighted across all three datasets (Lee2019\_MI, BNCI2014\_001, Zhou2016; $n=65$ participants total; Lee2019\_MI contributes 54 of 65, BNCI2014\_001 contributes 9 of 65, and Zhou2016 contributes 2 of 65 participants to the participant-weighted pooled estimate). Panel A (H2): source+target pooled retraining vs.\ subject-only calibration, ROC-AUC, at budgets 5 and 10 trials/class. Panel B (H3): decoder calibration efficiency, normalized log-AUCC, subject-only regime.}
+\label{tab:confirmatory_contrasts}
+\begin{tabularx}{\textwidth}{@{} X l r l l r @{}}
+\toprule
+\multicolumn{6}{@{}l}{\textbf{Panel A --- H2: Source + target pooled retraining $-$ subject-only calibration (ROC-AUC)}} \\
+\midrule
+Method & Budget (trials/class) & $n$ & Mean $\Delta$ [95\% CI] & Holm $p$ & $r_\mathrm{rb}$ \\
+\midrule
+CSP + LDA & 5 & 65 & 0.057 [0.028, 0.083] & $<$0.001 & 0.568 \\
+CSP + LDA & 10 & 65 & 0.021 [-0.011, 0.050] & 0.136 & 0.261 \\
+Log-variance + LDA & 5 & 65 & 0.059 [0.031, 0.085] & $<$0.001 & 0.575 \\
+Log-variance + LDA & 10 & 65 & 0.031 [0.004, 0.058] & 0.016 & 0.397 \\
+Riemannian TS + LR & 5 & 65 & 0.035 [0.010, 0.060] & 0.015 & 0.413 \\
+Riemannian TS + LR & 10 & 65 & 0.008 [-0.016, 0.031] & 0.478 & 0.101 \\
+\midrule
+\multicolumn{6}{@{}l}{\textbf{Panel B --- H3: Decoder calibration efficiency (normalized log-AUCC)}} \\
+\midrule
+Method contrast & Regime & $n$ & Mean $\Delta$ [95\% CI] & Holm $p$ & $r_\mathrm{rb}$ \\
+\midrule
+Riemannian TS + LR $-$ CSP + LDA & Subject only & 65 & 0.036 [0.022, 0.049] & $<$0.001 & 0.704 \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}
+\footnotesize
+\item Holm-adjusted $p$ shown; no significance stars are used and the adjusted value itself is the displayed signal. Unadjusted raw $p$-values are omitted here for width and are preserved in \texttt{Table2\_confirmatory\_contrasts.csv}.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
