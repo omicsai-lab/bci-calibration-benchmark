@@ -22,7 +22,7 @@ class LogVariance(BaseEstimator, TransformerMixin):
     def __init__(self, epsilon: float = 1e-12):
         self.epsilon = epsilon
 
-    def fit(self, X: np.ndarray, y: np.ndarray | None = None) -> "LogVariance":
+    def fit(self, X: np.ndarray, y: np.ndarray | None = None) -> LogVariance:
         X = np.asarray(X)
         if X.ndim != 3:
             raise ValueError("X must have shape (epochs, channels, samples)")

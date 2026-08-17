@@ -12,7 +12,6 @@ from typing import Any
 from .config import ExperimentConfig
 from .provenance import PACKAGES, package_versions, repository_source_digest
 
-
 REQUIRED_PUBLIC_PACKAGES = {
     "numpy": None,
     "pandas": None,
@@ -32,8 +31,6 @@ def validate_environment(
 ) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
-    if sys.version_info < (3, 11):
-        errors.append(f"Python >=3.11 is required; observed {platform.python_version()}")
     versions = package_versions()
     required = REQUIRED_PUBLIC_PACKAGES if require_public_data_stack else {
         name: expected for name, expected in REQUIRED_PUBLIC_PACKAGES.items() if name != "moabb"

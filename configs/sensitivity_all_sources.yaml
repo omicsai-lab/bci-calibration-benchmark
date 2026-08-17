@@ -39,7 +39,7 @@ datasets:
 split:
   policy: latest_session_only
   test_fraction: 0.30
-  repeats: 5
+  repeats: 10
   allow_trial_level_fallback: false
   minimum_test_per_class: 10
   minimum_calibration_per_class: 40

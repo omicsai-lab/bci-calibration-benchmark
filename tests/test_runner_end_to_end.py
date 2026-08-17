@@ -6,8 +6,8 @@ from pathlib import Path
 import pandas as pd
 
 from bci_calibration_benchmark.aggregate import aggregate_run
-from bci_calibration_benchmark.synthetic import build_smoke_config, generate_synthetic_dataset
 from bci_calibration_benchmark.runner import run_benchmark
+from bci_calibration_benchmark.synthetic import build_smoke_config, generate_synthetic_dataset
 from bci_calibration_benchmark.validation import audit_result_integrity
 
 

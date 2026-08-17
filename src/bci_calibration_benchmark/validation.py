@@ -13,7 +13,6 @@ from .metrics import METRIC_NAMES, compute_binary_metrics
 from .statistics import validate_metrics_frame
 from .utils import fingerprint
 
-
 CONDITION_KEY = [
     "dataset",
     "target_subject",

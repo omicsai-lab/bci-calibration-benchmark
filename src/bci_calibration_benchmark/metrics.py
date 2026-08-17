@@ -12,7 +12,6 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 
-
 METRIC_NAMES = (
     "roc_auc",
     "balanced_accuracy",

@@ -58,7 +58,7 @@ class BraindecodeEEGNetClassifier(BaseEstimator, ClassifierMixin):
         check_is_fitted(self, ("channel_mean_", "channel_std_"))
         return (X - self.channel_mean_) / self.channel_std_
 
-    def fit(self, X: np.ndarray, y: np.ndarray) -> "BraindecodeEEGNetClassifier":
+    def fit(self, X: np.ndarray, y: np.ndarray) -> BraindecodeEEGNetClassifier:
         torch, EEGNet = self._imports()
         X = np.asarray(X, dtype=np.float32)
         y = np.asarray(y, dtype=np.int64)

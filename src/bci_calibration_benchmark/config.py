@@ -10,7 +10,6 @@ import yaml
 
 from .utils import fingerprint
 
-
 PROCESSING_SCHEMA_VERSION = 1
 
 
