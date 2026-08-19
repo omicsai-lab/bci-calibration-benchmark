@@ -221,3 +221,33 @@ remaining participants. It does not retroactively imply that subjects 1 and
 3 will remain the only eligible `Zhou2016` participants in any future
 release of this dataset — only that these are the two currently verified
 eligible under this protocol's structural criterion.
+
+## 2026-08-15 — `sensitivity_all_sources.yaml` repeats misconfiguration
+
+**Decision:** Correct `split.repeats` in `configs/sensitivity_all_sources.yaml`
+from `5` to `10`.
+
+**Basis:** During Gate A static preflight comparison for the two
+prespecified sensitivity analyses, the all-source config was found to
+specify `split.repeats: 5`, while the frozen analysis plan specifies 10
+nested calibration repeats for the primary confirmatory analysis and both
+sensitivity analyses alike (see "Calibration budgets" above). The all-source
+sensitivity is prespecified to differ from the primary analysis only in
+removing the 10-source-participant cap (`source.max_subjects: 10` →
+`null`); a reduced repeat count is an unrelated statistical-protocol
+deviation, not part of that intended difference.
+
+**This is a pre-execution correction, not an outcome-driven change:** no
+sensitivity benchmark, prediction, metric, or aggregate result existed for
+`sensitivity_all_sources.yaml` at the time this was found or corrected. The
+value was changed back to `10` before `run_benchmark.py` was ever invoked
+against this config.
+
+**Scope:** This restores alignment with the frozen protocol so that the
+all-source sensitivity analysis differs from the primary confirmatory
+analysis only in source-cohort size, as intended. A regression test
+(`tests/test_config.py::test_confirmatory_and_sensitivity_configs_use_ten_nested_calibration_repeats`)
+now enforces `split.repeats == 10` for `configs/full.yaml`,
+`configs/sensitivity_three_channels.yaml`, and
+`configs/sensitivity_all_sources.yaml`. `configs/pilot.yaml` is exempt, as
+it is a bounded pilot design, not a confirmatory or sensitivity config.

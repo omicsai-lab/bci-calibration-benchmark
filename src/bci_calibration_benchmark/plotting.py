@@ -13,7 +13,6 @@ import pandas as pd
 from .config import ExperimentConfig
 from .utils import atomic_write_text, json_default, sha256_file
 
-
 METHOD_LABELS = {
     "logvar_lda": "Log-variance + LDA",
     "csp_lda": "CSP + LDA",

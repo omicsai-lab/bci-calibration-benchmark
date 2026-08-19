@@ -567,39 +567,39 @@ def make_supplement_figure_zhou2016() -> pd.DataFrame:
 # ==========================================================================
 def make_table1() -> pd.DataFrame:
     rows = [
-        dict(
-            dataset="Lee2019_MI",
-            nominal=54,
-            excluded=0,
-            excluded_detail="None",
-            validated=FLOW["Lee2019_MI"],
-            sessions=2,
-            channels=62,
-            task="Left/right motor imagery",
-            role="Contributes to pooled confirmatory analysis; dataset-specific supportive",
-        ),
-        dict(
-            dataset="BNCI2014_001",
-            nominal=9,
-            excluded=0,
-            excluded_detail="None",
-            validated=FLOW["BNCI2014_001"],
-            sessions=2,
-            channels=22,
-            task="Left/right motor imagery",
-            role="Contributes to pooled confirmatory analysis; dataset-specific supportive",
-        ),
-        dict(
-            dataset="Zhou2016",
-            nominal=4,
-            excluded=2,
-            excluded_detail="Subjects 2, 4 (structural)",
-            validated=FLOW["Zhou2016"],
-            sessions=3,
-            channels=14,
-            task="Left/right motor imagery",
-            role="Contributes to pooled confirmatory analysis (n=2); dataset-specific descriptive only",
-        ),
+        {
+            "dataset": "Lee2019_MI",
+            "nominal": 54,
+            "excluded": 0,
+            "excluded_detail": "None",
+            "validated": FLOW["Lee2019_MI"],
+            "sessions": 2,
+            "channels": 62,
+            "task": "Left/right motor imagery",
+            "role": "Contributes to pooled confirmatory analysis; dataset-specific supportive",
+        },
+        {
+            "dataset": "BNCI2014_001",
+            "nominal": 9,
+            "excluded": 0,
+            "excluded_detail": "None",
+            "validated": FLOW["BNCI2014_001"],
+            "sessions": 2,
+            "channels": 22,
+            "task": "Left/right motor imagery",
+            "role": "Contributes to pooled confirmatory analysis; dataset-specific supportive",
+        },
+        {
+            "dataset": "Zhou2016",
+            "nominal": 4,
+            "excluded": 2,
+            "excluded_detail": "Subjects 2, 4 (structural)",
+            "validated": FLOW["Zhou2016"],
+            "sessions": 3,
+            "channels": 14,
+            "task": "Left/right motor imagery",
+            "role": "Contributes to pooled confirmatory analysis (n=2); dataset-specific descriptive only",
+        },
     ]
     df = pd.DataFrame(rows)
     df.to_csv(TABLE_DIR / "Table1_datasets_and_cohort.csv", index=False)
@@ -1010,7 +1010,7 @@ underlying every figure and table in this artifact set. Full closure record:
 - Prediction rows: {result_audit["prediction_rows"]}
 - Result-integrity audit status: `{result_audit["status"]}`
 - Metrics independently recomputed from stored predictions and matched exactly: {result_audit["metric_conditions_recomputed"]}
-- AUCC curve completeness: {int((aucc_subject["curve_complete"] == True).sum())}/{len(aucc_subject)} rows complete
+- AUCC curve completeness: {int((aucc_subject["curve_complete"]).sum())}/{len(aucc_subject)} rows complete
 
 ## Aggregation
 

@@ -74,7 +74,7 @@ class OASCovariances(BaseEstimator, TransformerMixin):
     def __init__(self, epsilon: float = 1e-12):
         self.epsilon = epsilon
 
-    def fit(self, X: np.ndarray, y: np.ndarray | None = None) -> "OASCovariances":
+    def fit(self, X: np.ndarray, y: np.ndarray | None = None) -> OASCovariances:
         X = np.asarray(X)
         if X.ndim != 3:
             raise ValueError("X must have shape (epochs, channels, samples)")
@@ -102,7 +102,7 @@ class RiemannianTangentSpace(BaseEstimator, TransformerMixin):
         self.tol = tol
         self.epsilon = epsilon
 
-    def fit(self, X: np.ndarray, y: np.ndarray | None = None) -> "RiemannianTangentSpace":
+    def fit(self, X: np.ndarray, y: np.ndarray | None = None) -> RiemannianTangentSpace:
         X = np.asarray(X, dtype=float)
         if X.ndim != 3 or X.shape[1] != X.shape[2]:
             raise ValueError("X must contain square covariance matrices")

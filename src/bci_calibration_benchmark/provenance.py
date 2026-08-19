@@ -15,7 +15,6 @@ from typing import Any
 from .config import ExperimentConfig
 from .utils import atomic_write_text, fingerprint, json_default, sha256_file
 
-
 PACKAGES = (
     "numpy",
     "pandas",

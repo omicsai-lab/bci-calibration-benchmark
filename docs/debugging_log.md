@@ -302,3 +302,94 @@ python scripts/run_benchmark.py --config configs/pilot.yaml
 python scripts/audit_results.py --config configs/pilot.yaml    # status: ok
 python scripts/aggregate_results.py --config configs/pilot.yaml
 ```
+
+## 6. `validate_data.py`: `Preprocessing payload mismatch for Lee2019_MI` on a config with non-null `channels`
+
+**Error encountered**
+
+```text
+ValueError: Preprocessing payload mismatch for Lee2019_MI
+```
+
+Raised by `validate_dataset()` (`datasets.py`) on the first run of
+`prepare_data.py` → `validate_data.py` against `configs/sensitivity_three_channels.yaml`,
+immediately after `prepare_data.py` itself completed with no errors or
+warnings.
+
+**Investigation**
+
+`PreprocessingSection.channels` is typed `tuple[str, ...] | None`
+(`config.py`). `validate_dataset()` compared
+`manifest.get("preprocessing") != asdict(config.preprocessing)` — the
+manifest side comes from `json.load`, so `channels` deserializes as a
+Python `list`; the config side comes straight from `asdict()`, so `channels`
+stays a `tuple`. `["C3", "Cz", "C4"] != ("C3", "Cz", "C4")` is `True` in
+Python even though they encode the same channel list in the same order, so
+this comparison failed for any config with non-null `channels`, regardless
+of whether the manifest actually matched. Confirmed directly:
+
+```python
+>>> asdict(config.preprocessing)["channels"]
+('C3', 'Cz', 'C4')
+>>> json.load(open(manifest_path))["preprocessing"]["channels"]
+['C3', 'Cz', 'C4']
+>>> asdict(config.preprocessing) == json.load(open(manifest_path))["preprocessing"]
+False
+>>> manifest["preprocessing_fingerprint"] == config.preprocessing_fingerprint
+True   # the fingerprint check (which passed) already confirmed these encode
+       # the same preprocessing; only the raw-payload equality check was wrong
+```
+
+Also confirmed the prepared data itself was correct and unaffected: subject
+1's shard was `X.shape == (200, 3, 384)` — exactly the requested 3-channel
+(C3, Cz, C4) montage. This was a false-positive in the validation harness,
+not a real preprocessing mismatch, and no config field, fingerprint, or
+dataset had ever exercised this code path with non-null `channels` before
+(`full.yaml`, `sensitivity_all_sources.yaml`, and `pilot.yaml` all use
+`channels: null`, so `None == None` is type-stable regardless of the bug;
+`sensitivity_three_channels.yaml` was the first checked-in config to set a
+non-null value).
+
+This is an engineering/type-representation bug in the validation harness,
+not a scientific, protocol, or eligibility issue — no scientific decision
+changes as a result (see `docs/DECISIONS.md`, which intentionally does not
+record this).
+
+**Change made**
+
+`src/bci_calibration_benchmark/datasets.py::validate_dataset` — normalizes
+the expected preprocessing payload to its JSON-native representation before
+comparing:
+
+```python
+expected_preprocessing = json.loads(json.dumps(asdict(config.preprocessing)))
+if manifest.get("preprocessing") != expected_preprocessing:
+    raise ValueError(f"Preprocessing payload mismatch for {section.name}")
+```
+
+This round-trips *both* sides through JSON semantics (tuples become lists on
+both sides) instead of comparing a raw dataclass payload against an
+already-JSON-decoded one. It is generic — not specific to `channels` or to
+any particular channel list — and applies to any current or future
+tuple-valued preprocessing field. The manifest content, fingerprint logic,
+preprocessing computation, audit tolerances, and eligibility rules are all
+unchanged.
+
+**Scientific consequence**
+
+None. This only fixes a false-positive in a metadata equality check inside
+`validate_data.py`; it does not change what preprocessing is computed,
+what is written to any manifest, or any tolerance/eligibility rule. It
+newly *allows* the prespecified three-channel sensitivity config to pass
+validation (it was previously unable to pass validation with *any* correct
+`channels` value, not just the correct one).
+
+**Verification**
+
+```bash
+python -m pytest tests/test_datasets.py -v
+# new: test_validate_dataset_accepts_matching_non_null_channels_after_json_round_trip
+# new: test_validate_dataset_rejects_genuinely_different_channel_payload
+python -m pytest
+python scripts/validate_data.py --config configs/sensitivity_three_channels.yaml
+```
