@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bci-calibration-benchmark"
-version = "0.1.1"
+version = "1.0.0"
 description = "Leakage-resistant benchmarking of calibration burden in motor-imagery EEG BCIs"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -23,7 +23,7 @@ keywords = [
   "neuroAI"
 ]
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Science/Research",
   "License :: OSI Approved :: BSD License",
   "Programming Language :: Python :: 3",
@@ -63,6 +63,7 @@ bci-calibration = "bci_calibration_benchmark.cli:main"
 
 [project.urls]
 Homepage = "https://omicsai.org"
+Repository = "https://github.com/omicsai-lab/bci-calibration-benchmark"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

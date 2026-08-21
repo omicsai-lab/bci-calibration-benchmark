@@ -2,11 +2,18 @@ cff-version: 1.2.0
 message: "Please cite this software and the original datasets and libraries used in your analysis."
 title: "BCI Calibration Benchmark"
 type: software
-version: 0.1.1
-date-released: 2026-08-12
+version: 1.0.0
+# date-released: intentionally left unset in this release-prep round. This
+# repository has not yet been tagged, GitHub-released, or archived (no
+# Zenodo DOI). Set this to the actual ISO 8601 release date at the time the
+# v1.0.0 tag/release/archival deposition is actually created — do not
+# invent a date here before then.
 authors:
   - family-names: Li
     given-names: James
+    email: xl35@georgetown.edu
+    orcid: "https://orcid.org/0000-0003-0086-4282"
+repository-code: "https://github.com/omicsai-lab/bci-calibration-benchmark"
 license: BSD-3-Clause
 keywords:
   - brain-computer interface
