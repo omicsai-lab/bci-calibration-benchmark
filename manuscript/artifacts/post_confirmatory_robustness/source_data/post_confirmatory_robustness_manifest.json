@@ -1,0 +1,49 @@
+{
+  "analyses": {
+    "A_without_zhou": {
+      "classification": "post_confirmatory_robustness",
+      "meta": {
+        "datasets_included": [
+          "BNCI2014_001",
+          "Lee2019_MI"
+        ],
+        "n_participants": 63,
+        "n_participants_primary": 65,
+        "primary_n_unchanged": true
+      },
+      "output": "without_zhou_pairwise_tests.csv"
+    },
+    "B_random_intercept_only": {
+      "classification": "model_form_robustness",
+      "diagnostics": {
+        "aic": -3643.745224988719,
+        "bic": -3558.1061673848217,
+        "classification": "model_form_robustness_random_intercept_only",
+        "converged": true,
+        "formula": "roc_auc ~ log2_budget * C(method) * C(regime) + C(dataset)",
+        "log_likelihood": 1837.8726124943596,
+        "n_observations": 1560,
+        "n_participants": 65,
+        "note": "This is a deliberate, always-computed side-by-side comparison, not the convergence-triggered fallback inside statistics.fit_mixed_effects. The primary random-intercept+random-slope model remains the analysis of record.",
+        "random_effects_structure": "random_intercept",
+        "warnings": []
+      },
+      "outputs": [
+        "random_intercept_only_coefficients.csv",
+        "random_intercept_only_diagnostics.json",
+        "mixed_model_structure_comparison.csv"
+      ]
+    },
+    "C_fraction_benefiting": {
+      "classification": "descriptive_exploratory_summary",
+      "no_p_values": true,
+      "output": "fraction_benefiting.csv"
+    }
+  },
+  "primary_n_65_analysis_unchanged": true,
+  "schema_version": 1,
+  "source_aucc_subject_sha256": "43fd976f9dbbe93969f40b3f3039bb4d5efc2b2ceaddb50bc525319a1ee1fd6f",
+  "source_mixed_effects_coefficients_sha256": "235b4791d938f39a5c2df2202841544f67ae2a4fb2bc5a96690aa054bd378f0a",
+  "source_primary_dir": "results/bci-calibration-full-v1-3fb8efe7e617b0c1",
+  "source_summary_subject_sha256": "c673caabea72a57c9a3565ca6dfdc3396648349815e9c3b939c7a4e09e7aff2a"
+}
