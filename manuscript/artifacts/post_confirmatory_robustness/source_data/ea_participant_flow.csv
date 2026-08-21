@@ -1,0 +1,4 @@
+dataset,participants_attempted,participants_with_any_success,participants_with_any_failure,successful_condition_rows,failed_condition_rows,participant_condition_summaries
+BNCI2014_001,9,9,0,2160,0,216
+Lee2019_MI,54,54,0,12960,0,1296
+Zhou2016,2,2,0,480,0,48

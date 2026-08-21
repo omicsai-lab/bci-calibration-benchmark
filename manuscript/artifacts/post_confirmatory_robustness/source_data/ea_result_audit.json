@@ -1,0 +1,40 @@
+{
+  "assignment_reuse_report": {
+    "primary_experiment_fingerprint": "3fb8efe7e617b0c1",
+    "primary_git_commit": "750d87b8d877357b2907e0b61a66fca46cbe76b9",
+    "primary_output_dir": "results/bci-calibration-full-v1-3fb8efe7e617b0c1",
+    "regeneration_equality_gate": {
+      "calibration_assignments_rows": 97500,
+      "source_selection_rows": 614,
+      "source_trial_assignment_rows": 24560,
+      "split_assignments_rows": 140110,
+      "status": "ok"
+    },
+    "reused_assignment_file_sha256": {
+      "calibration_assignments.csv.gz": "8a57f9776e0b5d34cc028a494a75ff16db7f959d35ce5bb29ca505354df2a717",
+      "source_selection.csv": "7a4727401c680027ae47cea87a1d760389432e92732b83a3adc17385f53de238",
+      "source_trial_assignments.csv.gz": "a0da8c7fb5751cfc9dfc4418758cfe2db9d826101f3a1b824c6f2b0d8b23acb6",
+      "split_assignments.csv.gz": "f0c2f018d8dc77ca8cc29750a9ccd97db9f5fe0126aac96cb4457530f055e78e"
+    },
+    "status": "ok"
+  },
+  "classification": "post_confirmatory_exploratory_robustness",
+  "expected_conditions": 15600,
+  "failed_conditions": 0,
+  "metric_conditions_recomputed": 15600,
+  "metrics_checked": [
+    "roc_auc",
+    "balanced_accuracy",
+    "accuracy",
+    "macro_f1",
+    "brier",
+    "log_loss"
+  ],
+  "participants": 65,
+  "prediction_rows": 1655040,
+  "source_alignment_provenance_rows": 614,
+  "status": "ok",
+  "successful_conditions": 15600,
+  "target_alignment_provenance_rows": 2600,
+  "total_participants": 65
+}

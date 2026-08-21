@@ -1,0 +1,13 @@
+{
+  "aic": -3643.745224988719,
+  "bic": -3558.1061673848217,
+  "classification": "model_form_robustness_random_intercept_only",
+  "converged": true,
+  "formula": "roc_auc ~ log2_budget * C(method) * C(regime) + C(dataset)",
+  "log_likelihood": 1837.8726124943596,
+  "n_observations": 1560,
+  "n_participants": 65,
+  "note": "This is a deliberate, always-computed side-by-side comparison, not the convergence-triggered fallback inside statistics.fit_mixed_effects. The primary random-intercept+random-slope model remains the analysis of record.",
+  "random_effects_structure": "random_intercept",
+  "warnings": []
+}
