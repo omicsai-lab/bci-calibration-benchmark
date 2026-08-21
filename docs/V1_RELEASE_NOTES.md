@@ -61,10 +61,13 @@ recomputed.
 
 ## Release process status
 
-This release has been **prepared, not published**. As of this file's
-writing: the release-preparation changes have been committed and pushed to
-the `release_v1.0.0` branch for review; they have **not** yet been merged
-to `main`. No `v1.0.0` git tag exists, no GitHub Release exists, and no
-Zenodo (or other archival) DOI has been minted. See
-`docs/V1_RELEASE_CANDIDATE_REPORT.md` for the exact list of remaining
-human decisions before this candidate becomes a published release.
+`v1.0.0` has been **published**. The `v1.0.0` GitHub Release was created
+from the `release_v1.0.0` branch and has been **archived successfully by
+Zenodo**. Two DOIs were minted:
+
+- **Specific `v1.0.0` DOI: [10.5281/zenodo.22038602](https://doi.org/10.5281/zenodo.22038602)** — resolves to the exact archived snapshot of this software version; this is the DOI to cite for the manuscript.
+- **Concept DOI: [10.5281/zenodo.22038603](https://doi.org/10.5281/zenodo.22038603)** — a stable identifier for the software project as a whole, which will resolve to whichever version is most recently archived; do not use this in place of the version DOI when citing the exact software used for the manuscript's results.
+
+See `docs/V1_RELEASE_CANDIDATE_REPORT.md` for the release-candidate
+validation record and `CITATION.cff` for the machine-readable citation
+metadata, which now records the specific `v1.0.0` DOI.
