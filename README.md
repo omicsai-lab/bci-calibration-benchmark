@@ -4,7 +4,7 @@
 
 This repository contains the completed, audited computational analysis supporting a manuscript in preparation:
 
-> **The Calibration–Performance Trade-off in Motor-Imagery Brain–Computer Interfaces: A Reproducible Cross-Session Benchmark**
+> **From cold start to personalization: a leakage-resistant cross-session benchmark of motor-imagery BCI calibration efficiency**
 
 The scientific question is operational rather than architectural:
 

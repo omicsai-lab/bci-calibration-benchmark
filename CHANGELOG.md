@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 — 2026-08-20 (software release-prep date; see `docs/V1_RELEASE_CANDIDATE_REPORT.md` for actual tag/release date finalization)
+## 1.0.0 — 2026-08-21
 
 First manuscript-associated archival software release. Closes execution of
 the confirmatory full-cohort analysis, both pre-specified sensitivity

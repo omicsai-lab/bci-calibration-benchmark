@@ -3,11 +3,7 @@ message: "Please cite this software and the original datasets and libraries used
 title: "BCI Calibration Benchmark"
 type: software
 version: 1.0.0
-# date-released: intentionally left unset in this release-prep round. This
-# repository has not yet been tagged, GitHub-released, or archived (no
-# Zenodo DOI). Set this to the actual ISO 8601 release date at the time the
-# v1.0.0 tag/release/archival deposition is actually created — do not
-# invent a date here before then.
+date-released: 2026-08-21
 authors:
   - family-names: Li
     given-names: James

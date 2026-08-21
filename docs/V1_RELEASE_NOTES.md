@@ -62,10 +62,9 @@ recomputed.
 ## Release process status
 
 This release has been **prepared, not published**. As of this file's
-writing: no git tag has been created, no commit has been made for this
-round's changes, no GitHub Release exists, and no Zenodo (or other
-archival) DOI has been minted. `CITATION.cff`'s `date-released` field is
-intentionally left unset pending the actual tag/release/archival-deposit
-date. See `docs/V1_RELEASE_CANDIDATE_REPORT.md` for the exact list of
-remaining human decisions before this candidate becomes a published
-release.
+writing: the release-preparation changes have been committed and pushed to
+the `release_v1.0.0` branch for review; they have **not** yet been merged
+to `main`. No `v1.0.0` git tag exists, no GitHub Release exists, and no
+Zenodo (or other archival) DOI has been minted. See
+`docs/V1_RELEASE_CANDIDATE_REPORT.md` for the exact list of remaining
+human decisions before this candidate becomes a published release.
