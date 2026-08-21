@@ -261,6 +261,13 @@ This is secondary analysis of public, de-identified research datasets. The repos
 
 ## Citation and license
 
-Until a DOI is assigned, cite the software using `CITATION.cff`. Any publication must also cite the original dataset papers, MOABB, MNE-Python, scikit-learn, and the relevant decoding-method references in `manuscript/references.bib`.
+Cite the software using `CITATION.cff`. Any publication must also cite the original dataset papers, MOABB, MNE-Python, scikit-learn, and the relevant decoding-method references in `manuscript/references.bib`.
+
+### Archival citation / code availability
+
+The `v1.0.0` GitHub Release has been archived by Zenodo:
+
+- **Specific `v1.0.0` DOI (frozen release used for the manuscript): [10.5281/zenodo.22038602](https://doi.org/10.5281/zenodo.22038602)** — cite this DOI when citing the exact software version used to produce the results in this repository.
+- **Concept DOI (always resolves to the latest archived version): [10.5281/zenodo.22038603](https://doi.org/10.5281/zenodo.22038603)** — use this DOI only when referring to the software project in general, not to a specific version.
 
 Code is released under the BSD 3-Clause License. Dataset files retain their original terms and are not redistributed.

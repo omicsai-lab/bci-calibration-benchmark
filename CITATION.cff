@@ -4,6 +4,10 @@ title: "BCI Calibration Benchmark"
 type: software
 version: 1.0.0
 date-released: 2026-08-21
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.22038602"
+    description: "Archived Zenodo record for this specific software version (v1.0.0)."
 authors:
   - family-names: Li
     given-names: James

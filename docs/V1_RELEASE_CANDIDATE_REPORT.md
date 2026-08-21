@@ -5,9 +5,13 @@ preparation. Release-candidate validation (tests, lint, build, fingerprint
 checks, manifest regeneration) was originally performed **before** commit,
 against an uncommitted working tree, exactly as the release-prep task
 required. Those validated release-prep changes were then **committed and
-pushed** to `release_v1.0.0` for human review. As of this report: the
-branch has **not** been merged to `main`, no `v1.0.0` git tag exists, no
-GitHub Release exists, and no Zenodo DOI has been minted.
+pushed** to `release_v1.0.0` for human review.
+
+**Update:** the `v1.0.0` GitHub Release has since been created and
+archived by Zenodo. Specific `v1.0.0` DOI:
+[10.5281/zenodo.22038602](https://doi.org/10.5281/zenodo.22038602);
+concept DOI: [10.5281/zenodo.22038603](https://doi.org/10.5281/zenodo.22038603).
+See "Archival (Zenodo) status" below and `docs/V1_RELEASE_NOTES.md`.
 
 **No benchmark, model fitting, participant selection, scientific
 aggregation, or statistical analysis was rerun or modified in this
@@ -184,25 +188,20 @@ sensitivity definition, or statistical test was touched.
 
 ## Archival (Zenodo) status
 
-- Zenodo's GitHub integration has been **enabled** for this repository.
-- **No GitHub Release has been created and no Zenodo DOI exists yet.**
-- This round did **not** create, guess, or insert a placeholder DOI
-  anywhere (`CITATION.cff`, `README.md`, or elsewhere).
-- DOI minting is deferred until after this branch is merged and an actual
-  `v1.0.0` GitHub Release is created — Zenodo mints a DOI automatically
-  from that Release once those steps occur. That merge/tag/Release
-  sequence is itself outside this round's authorization.
+**Update (superseding the status originally recorded here): the `v1.0.0`
+GitHub Release has been created and archived successfully by Zenodo.**
+
+- Specific `v1.0.0` DOI: [10.5281/zenodo.22038602](https://doi.org/10.5281/zenodo.22038602) — the frozen archived snapshot corresponding to this exact software version; this is the DOI recorded in `CITATION.cff` and the one to cite for the manuscript.
+- Concept DOI: [10.5281/zenodo.22038603](https://doi.org/10.5281/zenodo.22038603) — resolves to the latest archived version of the software project; not version-specific.
+- `CITATION.cff` and `README.md` have been updated (in the `post_release_metadata` branch) to record the specific `v1.0.0` DOI above. No DOI was guessed or placeholder-inserted at any point; both values above were supplied only after Zenodo actually minted them.
 
 ## Remaining human decisions
 
 1. Reconciling `CITATION.cff`'s recorded `date-released: 2026-08-21` against
-   the actual git tag/GitHub Release timestamp once that step occurs (they
-   may not be the same day).
-2. Merge of `release_v1.0.0` to `main`.
-3. Final git tag creation (`v1.0.0`).
-4. GitHub Release creation.
-5. Zenodo DOI, minted automatically after the GitHub Release above exists.
-6. Final manuscript submission status (this repository supports, but does not itself constitute, the manuscript).
+   the actual git tag/GitHub Release timestamp (they may not be the same
+   day).
+2. Merge of `release_v1.0.0` (and this metadata branch) to `main`.
+3. Final manuscript submission status (this repository supports, but does not itself constitute, the manuscript).
 
 No other item is outstanding: software version, author identity, ORCID,
 email, `Development Status` classifier, repository URL, and the intended
