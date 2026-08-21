@@ -8,8 +8,9 @@ comparisons and bootstrap participants rather than rows of trial predictions.
 from __future__ import annotations
 
 import warnings
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any, Iterable
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -18,7 +19,6 @@ from scipy.stats import rankdata, wilcoxon
 from .config import ExperimentConfig
 from .metrics import METRIC_NAMES
 from .utils import derive_seed
-
 
 CONDITION_COLUMNS = [
     "dataset",

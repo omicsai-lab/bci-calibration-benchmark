@@ -1,0 +1,4 @@
+dataset,nominal,excluded,excluded_detail,validated,sessions,channels,task,role
+Lee2019_MI,54,0,None,54,2,62,Left/right motor imagery,Contributes to pooled confirmatory analysis; dataset-specific supportive
+BNCI2014_001,9,0,None,9,2,22,Left/right motor imagery,Contributes to pooled confirmatory analysis; dataset-specific supportive
+Zhou2016,4,2,"Subjects 2, 4 (structural)",2,3,14,Left/right motor imagery,Contributes to pooled confirmatory analysis (n=2); dataset-specific descriptive only

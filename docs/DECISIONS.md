@@ -169,9 +169,85 @@ removal:**
 **Estimand:** Unchanged. Left-hand-versus-right-hand motor-imagery ROC-AUC
 under later-session holdout remains the estimand; this decision only
 determines which participants can be structurally scored under that
-estimand. The remaining `Zhou2016` participants (all others satisfy the
-25-trials/class/run floor at the time of this pilot) are unaffected.
+estimand. At pilot time, subjects 1 and 3 (the only other `Zhou2016`
+subjects then exercised) satisfied the 25-trials/class/run floor; subject 4
+had not yet been checked (see the following decision entry, which found it
+does not).
 
 **Scope:** This decision must stand before confirmatory outcome analysis
 begins and must not be revisited based on how any decoder performs on the
 remaining participants.
+
+## 2026-08-13 — Zhou2016 subject 4 structural exclusion
+
+**Decision:** `Zhou2016` subject 4 is structurally ineligible for the
+prespecified confirmatory calibration design, for the same reason and under
+the same criterion as subject 2 above, and is excluded from
+`configs/full.yaml`, `configs/sensitivity_three_channels.yaml`, and
+`configs/sensitivity_all_sources.yaml`. (`configs/pilot.yaml` never included
+subject 4 and is unaffected.)
+
+**Basis:** Discovered during `prepare_data.py --config configs/full.yaml`
+(the confirmatory full-cohort run), which exercises every nominal `Zhou2016`
+subject for the first time — the pilot only ever checked subjects 1 and 3.
+Subject 4's session 0, run 0 contains only 20 trials/class instead of the
+protocol's 25/run (run 1 of the same session has the full 25/class),
+verified directly against raw event counts via `mne.events_from_annotations`
+on the released BIDS data. The short run's recorded duration (726.0 s) is
+proportionally shorter than every other run for this subject (840-869 s) —
+the same signature as subject 2's shortfall (702 s vs. ~850-910 s) — meaning
+the underlying recording session was genuinely shorter, not that events were
+lost from an otherwise full-length file. This fails
+`DATASET_EXPECTATIONS["Zhou2016"].minimum_trials_per_class_per_session`,
+which is unchanged and was not relaxed to accommodate this subject, exactly
+as for subject 2.
+
+**This is a pre-outcome structural exclusion, not performance-based subject
+removal:** the failure occurred inside `validate_subject_structure` during
+data preparation, strictly before any split, model fit, or prediction for
+this subject existed. No model performance was consulted. The finding was
+reported before any config change was made, and the exclusion — once
+confirmed — was applied using the identical mechanism and evidentiary
+standard as the subject-2 decision.
+
+**Estimand:** Unchanged, for the same reasons as the subject-2 decision.
+With both subjects 2 and 4 excluded, `Zhou2016` contributes the same 2
+participants (1 and 3) to the confirmatory full-cohort run as it did to the
+pilot.
+
+**Scope:** This decision must stand before confirmatory outcome analysis
+begins and must not be revisited based on how any decoder performs on the
+remaining participants. It does not retroactively imply that subjects 1 and
+3 will remain the only eligible `Zhou2016` participants in any future
+release of this dataset — only that these are the two currently verified
+eligible under this protocol's structural criterion.
+
+## 2026-08-15 — `sensitivity_all_sources.yaml` repeats misconfiguration
+
+**Decision:** Correct `split.repeats` in `configs/sensitivity_all_sources.yaml`
+from `5` to `10`.
+
+**Basis:** During Gate A static preflight comparison for the two
+prespecified sensitivity analyses, the all-source config was found to
+specify `split.repeats: 5`, while the frozen analysis plan specifies 10
+nested calibration repeats for the primary confirmatory analysis and both
+sensitivity analyses alike (see "Calibration budgets" above). The all-source
+sensitivity is prespecified to differ from the primary analysis only in
+removing the 10-source-participant cap (`source.max_subjects: 10` →
+`null`); a reduced repeat count is an unrelated statistical-protocol
+deviation, not part of that intended difference.
+
+**This is a pre-execution correction, not an outcome-driven change:** no
+sensitivity benchmark, prediction, metric, or aggregate result existed for
+`sensitivity_all_sources.yaml` at the time this was found or corrected. The
+value was changed back to `10` before `run_benchmark.py` was ever invoked
+against this config.
+
+**Scope:** This restores alignment with the frozen protocol so that the
+all-source sensitivity analysis differs from the primary confirmatory
+analysis only in source-cohort size, as intended. A regression test
+(`tests/test_config.py::test_confirmatory_and_sensitivity_configs_use_ten_nested_calibration_repeats`)
+now enforces `split.repeats == 10` for `configs/full.yaml`,
+`configs/sensitivity_three_channels.yaml`, and
+`configs/sensitivity_all_sources.yaml`. `configs/pilot.yaml` is exempt, as
+it is a bounded pilot design, not a confirmatory or sensitivity config.

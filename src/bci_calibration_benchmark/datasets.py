@@ -434,7 +434,12 @@ def validate_dataset(
             f"Preprocessing fingerprint mismatch for {section.name}: "
             f"{manifest['preprocessing_fingerprint']} != {config.preprocessing_fingerprint}"
         )
-    if manifest.get("preprocessing") != asdict(config.preprocessing):
+    # Compare against the JSON-native representation, not the raw dataclass
+    # payload: fields such as `channels` (tuple[str, ...] | None) round-trip
+    # through the on-disk JSON manifest as lists, and `[...] != (...)` in
+    # Python even when they encode the same value.
+    expected_preprocessing = json.loads(json.dumps(asdict(config.preprocessing)))
+    if manifest.get("preprocessing") != expected_preprocessing:
         raise ValueError(f"Preprocessing payload mismatch for {section.name}")
 
     subjects = _selected_prepared_subjects(config, section)

@@ -1,0 +1,27 @@
+% Requires \usepackage{booktabs}, \usepackage{threeparttable}
+\begin{table}[t]
+\centering
+\small
+\begin{threeparttable}
+\caption{Participant-level mixed-effects model of ROC-AUC, compact main-text subset (formula: \texttt{roc\_auc \textasciitilde{} log2\_budget * C(method) * C(regime) + C(dataset)}; random-effects structure: random\_intercept\_and\_slope; $n$ = 1560 observations, 65 participants; converged: True). Shows the regime, budget, budget $\times$ regime, method, and dataset terms most directly relevant to interpretation. The complete 14-term fixed-effects table is in the supplement (\texttt{Table3\_mixed\_effects\_full\_supplement.tex}); random-effect variance components are reported separately.}
+\label{tab:mixed_effects}
+\begin{tabular}{lrrrr}
+\toprule
+Term & Estimate & SE & $z$ & $p$ \\
+\midrule
+Intercept & 0.6824 & 0.0430 & 15.86 & $<$0.001* \\
+Method: log-variance + LDA (vs. CSP + LDA) & -0.0213 & 0.0232 & -0.92 & 0.359 \\
+Method: Riemannian TS + LR (vs. CSP + LDA) & 0.0189 & 0.0232 & 0.81 & 0.416 \\
+Regime: subject-only (vs. source + target) & -0.1216 & 0.0232 & -5.23 & $<$0.001* \\
+Dataset: Lee2019\_MI (vs. BNCI2014\_001) & -0.0509 & 0.0436 & -1.17 & 0.242 \\
+Dataset: Zhou2016 (vs. BNCI2014\_001) & 0.1229 & 0.0947 & 1.30 & 0.194 \\
+log2(budget + 1) & 0.0128 & 0.0042 & 3.08 & 0.002* \\
+log2(budget+1) $\times$ subject-only & 0.0274 & 0.0057 & 4.81 & $<$0.001* \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item[*] $p < 0.05$, uncorrected (single model, not a multiple-comparison family). Diagnostic warning recorded at fit time: The MLE may be on the boundary of the parameter space.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

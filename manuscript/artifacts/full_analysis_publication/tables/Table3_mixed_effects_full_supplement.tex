@@ -1,0 +1,33 @@
+% Requires \usepackage{booktabs}, \usepackage{threeparttable}
+\begin{table}[t]
+\centering
+\small
+\begin{threeparttable}
+\caption{Complete participant-level mixed-effects model of ROC-AUC (formula: \texttt{roc\_auc \textasciitilde{} log2\_budget * C(method) * C(regime) + C(dataset)}; random-effects structure: random\_intercept\_and\_slope; $n$ = 1560 observations, 65 participants; converged: True): all 14 fixed-effect and interaction terms. The compact main-text subset is Table~3 in the main text; random-effect variance components are reported separately (\texttt{Table3\_mixed\_effects\_variance\_components\_supplement.csv}).}
+\label{tab:mixed_effects_full}
+\begin{tabular}{lrrrr}
+\toprule
+Term & Estimate & SE & $z$ & $p$ \\
+\midrule
+Intercept & 0.6824 & 0.0430 & 15.86 & $<$0.001* \\
+Method: log-variance + LDA (vs. CSP + LDA) & -0.0213 & 0.0232 & -0.92 & 0.359 \\
+Method: Riemannian TS + LR (vs. CSP + LDA) & 0.0189 & 0.0232 & 0.81 & 0.416 \\
+Regime: subject-only (vs. source + target) & -0.1216 & 0.0232 & -5.23 & $<$0.001* \\
+Dataset: Lee2019\_MI (vs. BNCI2014\_001) & -0.0509 & 0.0436 & -1.17 & 0.242 \\
+Dataset: Zhou2016 (vs. BNCI2014\_001) & 0.1229 & 0.0947 & 1.30 & 0.194 \\
+Log-variance + LDA $\times$ subject-only & 0.0096 & 0.0329 & 0.29 & 0.770 \\
+Riemannian TS + LR $\times$ subject-only & 0.0255 & 0.0329 & 0.78 & 0.437 \\
+log2(budget + 1) & 0.0128 & 0.0042 & 3.08 & 0.002* \\
+log2(budget+1) $\times$ log-variance + LDA & -0.0007 & 0.0057 & -0.12 & 0.903 \\
+log2(budget+1) $\times$ Riemannian TS + LR & 0.0006 & 0.0057 & 0.11 & 0.913 \\
+log2(budget+1) $\times$ subject-only & 0.0274 & 0.0057 & 4.81 & $<$0.001* \\
+log2(budget+1) $\times$ log-variance + LDA $\times$ subject-only & -0.0050 & 0.0081 & -0.62 & 0.535 \\
+log2(budget+1) $\times$ Riemannian TS + LR $\times$ subject-only & -0.0026 & 0.0081 & -0.32 & 0.750 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item[*] $p < 0.05$, uncorrected (single model, not a multiple-comparison family). Diagnostic warning recorded at fit time: The MLE may be on the boundary of the parameter space.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

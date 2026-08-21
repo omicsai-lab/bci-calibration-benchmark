@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import argparse
 import json
-import sys
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Sequence
 
 from .aggregate import aggregate_run
 from .config import load_config
@@ -47,6 +46,15 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("."),
         help="Repository root used for git/source provenance",
+    )
+    run.add_argument(
+        "--assignment-source",
+        type=Path,
+        default=None,
+        help=(
+            "Primary run's output directory to reuse split/calibration/source assignments from. "
+            "Required when the config's alignment.mode is not 'none'; ignored otherwise."
+        ),
     )
     _config_parser(subparsers, "aggregate", "Aggregate repeats at participant level")
     _config_parser(subparsers, "figures", "Generate figures from aggregated tables")
@@ -104,16 +112,46 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"\nSaved: {report_path}")
         return 0
     if args.command == "run":
-        print(run_benchmark(config, repository_root=args.repository_root))
+        if config.alignment.mode != "none":
+            if not args.assignment_source:
+                raise SystemExit(
+                    "--assignment-source is required when alignment.mode is not 'none'"
+                )
+            from .ea_runner import run_ea_benchmark
+
+            print(
+                run_ea_benchmark(
+                    config,
+                    assignment_source=args.assignment_source,
+                    repository_root=args.repository_root,
+                )
+            )
+        else:
+            print(run_benchmark(config, repository_root=args.repository_root))
         return 0
     if args.command == "aggregate":
-        print(aggregate_run(config))
+        if config.alignment.mode != "none":
+            from .ea_aggregate import aggregate_ea_run
+
+            print(aggregate_ea_run(config))
+        else:
+            print(aggregate_run(config))
         return 0
     if args.command == "figures":
-        print(make_all_figures(config))
+        if config.alignment.mode != "none":
+            from .ea_plotting import make_ea_figures
+
+            print(make_ea_figures(config))
+        else:
+            print(make_all_figures(config))
         return 0
     if args.command == "audit":
-        report = audit_result_integrity(config)
+        if config.alignment.mode != "none":
+            from .ea_validation import audit_ea_result_integrity
+
+            report = audit_ea_result_integrity(config)
+        else:
+            report = audit_result_integrity(config)
         print(json.dumps(report, indent=2, sort_keys=True))
         return 0 if report["status"] == "ok" else 2
     raise AssertionError(f"Unhandled command: {args.command}")

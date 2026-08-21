@@ -1,0 +1,1 @@
+**Supplement Table. All dataset-specific contrasts.** Every within-dataset (supportive) H2 and H3 contrast, including Zhou2016 (n=2, descriptive only), underlying the pooled confirmatory contrasts in Table 2.

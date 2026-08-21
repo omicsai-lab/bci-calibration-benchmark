@@ -10,7 +10,6 @@ import yaml
 
 from .utils import fingerprint
 
-
 PROCESSING_SCHEMA_VERSION = 1
 
 
@@ -111,6 +110,20 @@ class RuntimeSection:
 
 
 @dataclass(frozen=True)
+class AlignmentSection:
+    """Training-only Euclidean Alignment (He & Wu, 2020), applied upstream of any decoder.
+
+    ``mode: "none"`` (the default) reproduces the confirmatory pipeline
+    exactly and is a no-op everywhere in the codebase; every checked-in
+    confirmatory/sensitivity config therefore keeps its existing
+    ``experiment_fingerprint`` after this section was added.
+    """
+
+    mode: Literal["none", "euclidean_training_only"] = "none"
+    epsilon: float = 1e-12
+
+
+@dataclass(frozen=True)
 class ExperimentConfig:
     experiment: ExperimentSection
     preprocessing: PreprocessingSection
@@ -123,6 +136,7 @@ class ExperimentConfig:
     classical: ClassicalSection = field(default_factory=ClassicalSection)
     analysis: AnalysisSection = field(default_factory=AnalysisSection)
     runtime: RuntimeSection = field(default_factory=RuntimeSection)
+    alignment: AlignmentSection = field(default_factory=AlignmentSection)
     config_path: Path | None = field(default=None, compare=False, repr=False)
 
     @property
@@ -136,6 +150,16 @@ class ExperimentConfig:
     def experiment_fingerprint(self) -> str:
         payload = asdict(self)
         payload.pop("config_path", None)
+        # ``alignment`` was added after the primary/prespecified-sensitivity
+        # results were generated and fingerprinted. Omitting it from the
+        # hashed payload exactly at its no-op default ("none") keeps every
+        # pre-existing config's experiment_fingerprint, and therefore its
+        # output_dir, byte-identical to what already exists on disk. Any
+        # config that actually turns alignment on is unaffected by this
+        # omission (its alignment settings still change the fingerprint,
+        # since the dict is only popped when they equal the no-op default).
+        if self.alignment.mode == "none":
+            payload.pop("alignment", None)
         return fingerprint(payload, length=16)
 
     @property
@@ -283,6 +307,11 @@ class ExperimentConfig:
         if self.runtime.n_jobs_data < 1:
             raise ValueError("runtime.n_jobs_data must be at least 1")
 
+        if self.alignment.mode not in {"none", "euclidean_training_only"}:
+            raise ValueError("alignment.mode must be 'none' or 'euclidean_training_only'")
+        if self.alignment.epsilon <= 0:
+            raise ValueError("alignment.epsilon must be positive")
+
 
 def _expect_mapping(value: Any, name: str) -> dict[str, Any]:
     if not isinstance(value, dict):
@@ -322,6 +351,7 @@ def load_config(path: str | Path) -> ExperimentConfig:
             "classical",
             "analysis",
             "runtime",
+            "alignment",
         },
         "configuration",
     )
@@ -444,6 +474,10 @@ def load_config(path: str | Path) -> ExperimentConfig:
     )
     runtime = RuntimeSection(**runtime_raw)
 
+    alignment_raw = _expect_mapping(top.get("alignment", {}), "alignment")
+    _check_keys(alignment_raw, {"mode", "epsilon"}, "alignment")
+    alignment = AlignmentSection(**alignment_raw)
+
     config = ExperimentConfig(
         experiment=experiment,
         preprocessing=preprocessing,
@@ -456,6 +490,7 @@ def load_config(path: str | Path) -> ExperimentConfig:
         classical=classical,
         analysis=analysis,
         runtime=runtime,
+        alignment=alignment,
         config_path=config_path,
     )
     config.validate()

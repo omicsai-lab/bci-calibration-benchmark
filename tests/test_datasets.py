@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -8,8 +11,11 @@ from bci_calibration_benchmark.datasets import (
     DATASET_EXPECTATIONS,
     SUPPORTED_DATASETS,
     _instantiate_public_dataset,
+    validate_dataset,
     validate_subject_structure,
 )
+from bci_calibration_benchmark.io import DATASET_MANIFEST
+from bci_calibration_benchmark.synthetic import build_smoke_config, generate_synthetic_dataset
 
 
 def _metadata(sessions: int, runs_per_session: int, per_class_per_session: int) -> tuple[pd.DataFrame, np.ndarray]:
@@ -121,3 +127,41 @@ def test_non_lee2019_datasets_are_untouched_by_the_session_workaround() -> None:
         {},
     )
     assert dataset._selected_sessions is None
+
+
+def test_validate_dataset_accepts_matching_non_null_channels_after_json_round_trip(
+    tmp_path: Path,
+) -> None:
+    # Regression test for a JSON-representation bug: `preprocessing.channels`
+    # is a tuple in the in-memory config but round-trips through the on-disk
+    # dataset manifest as a JSON list. `validate_dataset()` used to compare
+    # the raw dataclass payload (tuple) against the manifest payload (list)
+    # with `!=`, which is always true in Python even for the same channels,
+    # so it never accepted any config with a non-null `channels` setting.
+    config = build_smoke_config(tmp_path, "three_channel_case")
+    generate_synthetic_dataset(
+        config.experiment.processed_root,
+        config.preprocessing_fingerprint,
+        config.preprocessing,
+    )
+    section = next(s for s in config.datasets if s.name == "SyntheticMI")
+    frame = validate_dataset(config, section)
+    assert len(frame) == len(section.subjects)
+
+
+def test_validate_dataset_rejects_genuinely_different_channel_payload(tmp_path: Path) -> None:
+    # A real payload mismatch (e.g. a stale or corrupted manifest reporting
+    # different channels under the same fingerprint) must still fail.
+    config = build_smoke_config(tmp_path, "corrupted_manifest_case")
+    generate_synthetic_dataset(
+        config.experiment.processed_root,
+        config.preprocessing_fingerprint,
+        config.preprocessing,
+    )
+    section = next(s for s in config.datasets if s.name == "SyntheticMI")
+    manifest_path = config.processed_dir / section.name / DATASET_MANIFEST
+    manifest = json.loads(manifest_path.read_text())
+    manifest["preprocessing"]["channels"] = ["C3", "Cz", "Pz"]
+    manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="Preprocessing payload mismatch"):
+        validate_dataset(config, section)

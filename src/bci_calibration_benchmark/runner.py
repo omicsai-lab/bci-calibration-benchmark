@@ -7,8 +7,9 @@ import gzip
 import json
 import time
 import traceback
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -29,7 +30,6 @@ from .sampling import (
 )
 from .splits import make_target_split
 from .utils import derive_seed, fingerprint
-
 
 METRICS_COLUMNS = [
     "dataset",
@@ -547,7 +547,7 @@ def _failed_metric_row(
         "fit_seconds": None,
         "predict_seconds": None,
     }
-    row.update({metric: None for metric in METRIC_NAMES})
+    row.update(dict.fromkeys(METRIC_NAMES))
     return row
 
 

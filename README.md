@@ -2,15 +2,26 @@
 
 **A leakage-resistant, cross-session benchmark of calibration burden in motor-imagery EEG brain–computer interfaces.**
 
-This repository is the computational foundation for the planned study:
+This repository contains the completed, audited computational analysis supporting a manuscript in preparation:
 
-> **The Calibration–Performance Trade-off in Motor-Imagery Brain–Computer Interfaces: A Reproducible Cross-Session Benchmark**
+> **From cold start to personalization: a leakage-resistant cross-session benchmark of motor-imagery BCI calibration efficiency**
 
 The scientific question is operational rather than architectural:
 
 > How much labeled EEG from a new user is required to improve performance on a later recording session, and how does that relationship vary across decoding methods, datasets, and users?
 
-Version `0.1.0` froze the classical-core protocol before any public-data outcome was examined. Version `0.1.1` validates that the full software/data pipeline runs end to end on real public EEG data (adapter execution, structural validation, benchmark, audit, aggregation, and figure generation). **Neither release contains a claimed public EEG result.** The `0.1.1` real-data pilot is a non-inferential software/data-path validation, not the confirmatory analysis; see [Public-data pilot](#public-data-pilot) below.
+Version `0.1.0` froze the classical-core protocol before any public-data outcome was examined. Version `0.1.1` validated that the full software/data pipeline runs end to end on real public EEG data (adapter execution, structural validation, benchmark, audit, aggregation, and figure generation) on a bounded pilot cohort; it made no scientific claim. Version `1.0.0` closes execution of the confirmatory full-cohort analysis, both pre-specified sensitivity analyses, and a reviewer-motivated post-confirmatory robustness program (see [Current study status](#current-study-status) below) and is the software release associated with manuscript preparation/submission. See [Public-data pilot](#public-data-pilot) for the historical `0.1.1` validation record.
+
+## Current study status
+
+- **Final eligible cohort:** N = 65 (`Lee2019_MI` 54, `BNCI2014_001` 9, `Zhou2016` 2), fixed by pre-outcome structural validation — see [Confirmatory design](#confirmatory-design) below.
+- **Primary confirmatory analysis** (`configs/full.yaml`): complete and audited — 19,500/19,500 conditions, 0 failures, 2,068,800 held-out predictions, result-integrity audit `PASS`. See [`docs/full_run_acceptance.md`](docs/full_run_acceptance.md).
+- **Pre-specified sensitivity analyses**: complete and audited — common `C3/Cz/C4` montage (19,500/19,500, audit `PASS`) and all-eligible-source-cohort (19,500/19,500, audit `PASS`). See [`docs/sensitivity_run_acceptance.md`](docs/sensitivity_run_acceptance.md).
+- **Post-confirmatory robustness analyses** (reviewer-motivated, performed after the confirmatory/sensitivity results were on record — never described as pre-specified): training-only Euclidean Alignment (15,600/15,600 conditions, 0 failures, 1,655,040 held-out predictions, audit `PASS`, exact primary-assignment reuse verified by an independent fail-closed regeneration check), a without-`Zhou2016` pooled re-aggregation, a random-intercept-only mixed-model comparison, and a descriptive fraction-of-participants-benefiting summary. See [`docs/post_confirmatory_robustness_acceptance.md`](docs/post_confirmatory_robustness_acceptance.md) and [`docs/POST_CONFIRMATORY_ROBUSTNESS_SPEC.md`](docs/POST_CONFIRMATORY_ROBUSTNESS_SPEC.md).
+- **Publication artifacts**: figures, tables, and traceable source-data CSVs for the confirmatory/sensitivity comparison and the post-confirmatory robustness package are generated under [`manuscript/artifacts/`](manuscript/artifacts/).
+- **Software validation**: the current test suite comprises 60 unit/integration/leakage-regression tests, all passing, alongside a deterministic synthetic end-to-end validation.
+
+Conservatively summarized, and only to the extent the completed analyses above support it: population EEG provides a reproducible low-budget advantage over subject-only calibration when target calibration data are scarce; the persistence and magnitude of that advantage depend on decoder and system design (it is not uniform across decoders or datasets); decoder ranking is more context-dependent than the system-level population-versus-personalization trade-off itself. **This repository makes no claim of universal decoder superiority and no claim of clinical utility.** This paragraph does not replace the confirmatory/pre-specified/post-confirmatory distinctions maintained throughout this README and the linked closure records — see those records for exact, audited numbers.
 
 ## Confirmatory design
 
@@ -22,7 +33,7 @@ The task is binary **left-hand versus right-hand motor imagery**. The confirmato
 | `BNCI2014_001` | 9 | 2 | 22 | 250 Hz | 72 per class | canonical BCI Competition IV-2a replication |
 | `Zhou2016` | 4 | 3 | 14 | 250 Hz | 50 per class | independent three-session protocol replication |
 
-The nominal total is 67 participants (sum of the "Nominal participants" column above) — the number of subject IDs each dataset publishes, before any structural check runs. This is **not** an eligible or analyzed sample size. The confirmatory full-cohort run applies pre-specified structural and class-count checks (session count, run count, per-class trial minimums, channel montage) to every participant before any decoder is fit; a participant who fails those checks is excluded and recorded, never dropped after outcome inspection. One such exclusion is already known and documented: `Zhou2016` subject 2 fails the per-session trial-count check on the publicly released recording itself (see [`docs/DECISIONS.md`](docs/DECISIONS.md)) and is excluded in `configs/full.yaml` and every sensitivity configuration. The confirmatory full-cohort analysis has not yet been run, so the true structurally eligible count across all three datasets is not yet known; see [Confirmatory readiness](docs/pilot_acceptance.md) for the current pilot-derived expectation.
+The nominal total is 67 participants (sum of the "Nominal participants" column above) — the number of subject IDs each dataset publishes, before any structural check runs. This is **not** the analyzed sample size. The confirmatory full-cohort run applies pre-specified structural and class-count checks (session count, run count, per-class trial minimums, channel montage) to every participant before any decoder is fit; a participant who fails those checks is excluded and recorded, never dropped after outcome inspection. Two `Zhou2016` participants (subjects 2 and 4) fail the per-session trial-count check on the publicly released recordings themselves and are excluded in `configs/full.yaml` and every sensitivity configuration; see [`docs/DECISIONS.md`](docs/DECISIONS.md) for the evidence and reasoning behind each exclusion. The confirmatory full-cohort run has executed and passed every integrity gate (environment validation, data preparation, structural validation, benchmark, audit, aggregation, figure generation) on **65 participants who satisfied every pre-specified session, run, channel, and trial-count eligibility requirement** (Lee2019_MI 54, BNCI2014_001 9, Zhou2016 2); see [`docs/full_run_acceptance.md`](docs/full_run_acceptance.md) for the closure record. A conservative summary of what these completed analyses support is given in [Current study status](#current-study-status) above; full manuscript-level interpretation is a separate task tracked outside this repository.
 
 For `Lee2019_MI`, the adapter is explicitly instantiated with `train_run=True`, `test_run=False`, and `resting_state=False`. This retains the labeled offline phase in both sessions and excludes the unlabeled online-feedback phase.
 
@@ -89,11 +100,11 @@ See [`docs/ANALYSIS_PLAN.md`](docs/ANALYSIS_PLAN.md) and [`docs/STATISTICAL_ANAL
 
 ```text
 .
-├── configs/                 # pilot, confirmatory, and sensitivity configurations
+├── configs/                 # pilot, confirmatory, sensitivity, and post-confirmatory-robustness configurations
 ├── data/                    # ignored MOABB cache and processed shards
-├── docs/                    # protocol, decisions, validation, governance, journal plan
+├── docs/                    # protocol, decisions, validation, governance, journal plan, closure/acceptance records
 ├── figures/                 # repository-level placeholder; run figures live under results/
-├── manuscript/              # outline, methods draft, BibTeX
+├── manuscript/              # outline, methods draft, BibTeX, publication artifacts (figures, tables, source data)
 ├── requirements/            # environment constraints
 ├── results/                 # ignored fingerprinted run outputs
 ├── scripts/                 # thin command-line wrappers
@@ -178,6 +189,26 @@ python scripts/aggregate_results.py --config configs/sensitivity_all_sources.yam
 
 Processed data are keyed by a preprocessing fingerprint, so configurations with identical preprocessing reuse compatible shards without silently overwriting them.
 
+## Post-confirmatory robustness
+
+These analyses were performed **after** the confirmatory and pre-specified-sensitivity results above were on record, in response to reviewer-style critique. They are never described as pre-specified or confirmatory, regardless of their results; see [`docs/POST_CONFIRMATORY_ROBUSTNESS_SPEC.md`](docs/POST_CONFIRMATORY_ROBUSTNESS_SPEC.md) and [`docs/post_confirmatory_robustness_acceptance.md`](docs/post_confirmatory_robustness_acceptance.md) for the full specification and closure record.
+
+Training-only Euclidean Alignment (`configs/sensitivity_ea_training_only.yaml`) reuses the confirmatory run's exact target-split, calibration, and source-selection assignments — verified by a fail-closed independent regeneration check before any model is fit — rather than drawing new random assignments:
+
+```bash
+python scripts/run_benchmark.py --config configs/sensitivity_ea_training_only.yaml \
+    --assignment-source results/bci-calibration-full-v1-<fingerprint>
+python scripts/audit_results.py --config configs/sensitivity_ea_training_only.yaml
+python scripts/aggregate_results.py --config configs/sensitivity_ea_training_only.yaml
+python scripts/make_figures.py --config configs/sensitivity_ea_training_only.yaml
+```
+
+Three additional analyses reuse only the confirmatory run's already-audited outputs (no benchmark is re-run): a without-`Zhou2016` pooled re-aggregation, a random-intercept-only mixed-model comparison, and a descriptive fraction-of-participants-benefiting summary.
+
+```bash
+python scripts/post_confirmatory_robustness.py
+```
+
 ## Auditable outputs
 
 Each run creates a fingerprinted directory under `results/` containing:
@@ -218,7 +249,11 @@ The code rejects or records failures when:
 
 `v0.1.0` passed the local unit/integration suite and a deterministic synthetic end-to-end run; MOABB and the public EEG archives were not available in that build environment, so real-data adapter execution remained an explicit pilot gate rather than a claimed validation.
 
-`v0.1.1` closes that gate: the full software/data pipeline (environment validation, 40 unit/integration tests, the synthetic smoke test, real-data preparation, real-data structural validation, benchmark execution, result audit, aggregation, and figure generation) has now run successfully end to end on real public EEG data for `Lee2019_MI`, `BNCI2014_001`, and `Zhou2016`. This validates the software and data path. **It does not constitute confirmatory scientific evidence** — the pilot is a bounded adapter/compute check (see [Public-data pilot](#public-data-pilot) above), and the confirmatory full-cohort analysis has not yet been run. See [`docs/VALIDATION.md`](docs/VALIDATION.md), [`docs/SOFTWARE_VALIDATION_REPORT.md`](docs/SOFTWARE_VALIDATION_REPORT.md), and [`docs/pilot_acceptance.md`](docs/pilot_acceptance.md).
+`v0.1.1` closed that gate: the full software/data pipeline (environment validation, 40 unit/integration tests, the synthetic smoke test, real-data preparation, real-data structural validation, benchmark execution, result audit, aggregation, and figure generation) ran successfully end to end on real public EEG data for `Lee2019_MI`, `BNCI2014_001`, and `Zhou2016`. This validated the software and data path on a bounded adapter/compute pilot cohort (see [Public-data pilot](#public-data-pilot) above); it did not itself constitute confirmatory scientific evidence. See [`docs/VALIDATION.md`](docs/VALIDATION.md), [`docs/SOFTWARE_VALIDATION_REPORT.md`](docs/SOFTWARE_VALIDATION_REPORT.md), and [`docs/pilot_acceptance.md`](docs/pilot_acceptance.md).
+
+The confirmatory full-cohort run (`configs/full.yaml`) has since executed and passed every gate — environment validation, data preparation, structural validation, benchmark (19,500/19,500 conditions, 0 failed), result-integrity audit, aggregation, and figure generation — on 65 eligible participants. See [`docs/full_run_acceptance.md`](docs/full_run_acceptance.md) for the closure record. Both pre-specified sensitivity analyses (common `C3/Cz/C4` montage; all-eligible-source-cohort) have likewise executed and passed every gate on the identical 65-participant cohort; see [`docs/sensitivity_run_acceptance.md`](docs/sensitivity_run_acceptance.md).
+
+`v1.0.0` closes execution of the full program associated with the manuscript: the confirmatory analysis and both pre-specified sensitivities above, plus a reviewer-motivated post-confirmatory robustness program (training-only Euclidean Alignment; without-`Zhou2016` re-aggregation; a random-intercept-only mixed-model comparison; a descriptive fraction-benefiting summary) — see [Current study status](#current-study-status) and [`docs/post_confirmatory_robustness_acceptance.md`](docs/post_confirmatory_robustness_acceptance.md). The current test suite comprises 60 unit/integration/leakage-regression tests, all passing. This closes execution and the analyses listed in [Current study status](#current-study-status); it does not itself constitute a completed manuscript, and no claim beyond the conservative summary given there is made in this README.
 
 ## Ethics and data governance
 

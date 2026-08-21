@@ -2,11 +2,14 @@ cff-version: 1.2.0
 message: "Please cite this software and the original datasets and libraries used in your analysis."
 title: "BCI Calibration Benchmark"
 type: software
-version: 0.1.1
-date-released: 2026-08-12
+version: 1.0.0
+date-released: 2026-08-21
 authors:
   - family-names: Li
     given-names: James
+    email: xl35@georgetown.edu
+    orcid: "https://orcid.org/0000-0003-0086-4282"
+repository-code: "https://github.com/omicsai-lab/bci-calibration-benchmark"
 license: BSD-3-Clause
 keywords:
   - brain-computer interface

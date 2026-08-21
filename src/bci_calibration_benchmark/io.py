@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -12,7 +13,6 @@ import pandas as pd
 from .config import PROCESSING_SCHEMA_VERSION
 from .data_types import SubjectShard
 from .utils import atomic_write_text, json_default, sha256_file
-
 
 SUBJECT_MANIFEST = "manifest.json"
 DATASET_MANIFEST = "dataset_manifest.json"
